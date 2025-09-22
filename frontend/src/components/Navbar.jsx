@@ -23,7 +23,7 @@ export default function Navbar({ onUserClick }) {
           <a href="https://store.mototrekkin.com.au/" className="hover:text-yellow-400 transition">Shop</a>
         <a href="/training" className="hover:text-yellow-400 transition">Training</a>
         <a href="https://store.mototrekkin.com.au/tyres/" className="hover:text-yellow-400 transition">Tyres</a>
-        <a href="#" className="hover:text-yellow-400 transition">Service</a>
+        <a href="/services" className="hover:text-yellow-400 transition">Service</a>
         <a href="tel:0240724511" className="hover:text-yellow-400 transition">02 4072 4511</a>
       </div>
 
@@ -61,7 +61,7 @@ export default function Navbar({ onUserClick }) {
           <a href="https://store.mototrekkin.com.au/" className="hover:text-yellow-400 transition">Shop</a>
           <a href="/training" className="hover:text-yellow-400 transition">Training</a>
           <a href="https://store.mototrekkin.com.au/tyres/" className="hover:text-yellow-400 transition">Tyres</a>
-          <a href="#" className="hover:text-yellow-400 transition">Service</a>
+          <a href="/services" className="hover:text-yellow-400 transition">Service</a>
           <a href="tel:0240724511" className="hover:text-yellow-400 transition">02 4072 4511</a>
         </div>
       )}

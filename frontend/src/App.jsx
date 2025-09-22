@@ -22,6 +22,11 @@ import TrainingPage from './pages/TrainingPage';
 import OffRoadTrainingDetailPage from './pages/OffRoadTrainingDetailPage';
 import RegistrationPage from './pages/RegistrationPage';
 
+import ServicesPage from './pages/services';
+import ServiceBookingForm from './components/serviceBookingForm';
+import UserDashboard from './pages/dashboard/UserDashboard';
+import AdminDashboard from './pages/dashboard/AdminDashboard';
+
 
 
 
@@ -61,6 +66,12 @@ const App = () => {
           <Route path="/training" element={<TrainingPage />} />
           <Route path="/off-road-training-detail" element={<OffRoadTrainingDetailPage />} />
           <Route path="/registration" element={<RegistrationPage />} />
+
+           <Route path="/services" element ={<ServicesPage/>}/>
+           <Route path="/service-booking-form" element ={<ServiceBookingForm/>}/>
+
+           <Route path="/userdashboard" element={<UserDashboard />} />
+           <Route path="admin/dashboard" element={<AdminDashboard />} />
 
 
         </Routes>
