@@ -1,0 +1,19 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import "tailwindcss";
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+@keyframes zoom {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+  .animate-zoom {
+    animation: zoom 2s infinite ease-in-out;
+  }
