@@ -1,26 +1,86 @@
-import React, { useState } from "react";
+// src/components/AuthModal.jsx
+import React, { useState, useContext } from "react";
+import axios from "axios";
 import authimg from "../assets/login-sideimage.webp";
+import { AuthContext } from "./AuthContext";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AuthModal = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const BASE_URL = "http://localhost:5000/api/auth";
 
   if (!isOpen) return null;
+
+  // SIGNUP
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match");
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${BASE_URL}/signup`, {
+        fullName,
+        email,
+        password,
+        confirmPassword,
+      });
+      setMessage(res.data.message); // Show signup success
+      setIsLogin(true); // Auto-switch to login
+      setPassword(""); // Clear password fields
+      setConfirmPassword("");
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Signup failed");
+    }
+  };
+
+  // LOGIN
+  const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post(`${BASE_URL}/login`, { email, password });
+
+    console.log('AuthModal: Login successful, redirecting', {
+      token: res.data.token,
+      user: res.data.user,
+      from: location.state?.from?.pathname,
+    });
+
+    // Save token & user info and update AuthContext
+    login(res.data.token, res.data.user);
+
+    // Get the intended route from location.state.from, default to /userdashboard
+    const from = location.state?.from?.pathname || '/userdashboard';
+
+    // Close modal and redirect to the intended route
+    onClose();
+    navigate(from, { replace: true });
+  } catch (err) {
+    console.error('AuthModal: Login failed', err.response?.data || err.message);
+    setMessage(err.response?.data?.message || 'Login failed');
+  }
+};
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
       <div className="bg-black rounded-2xl shadow-lg w-full max-w-3xl flex flex-col md:flex-row overflow-hidden">
-        {/* Left side (Image) */}
+        {/* Left image */}
         <div className="hidden md:block md:w-1/2">
-          <img
-            src={authimg}
-            alt="Bike"
-            className="h-full w-full object-cover"
-          />
+          <img src={authimg} alt="Bike" className="h-full w-full object-cover" />
         </div>
 
-        {/* Right side (Form) */}
+        {/* Right form */}
         <div className="w-full md:w-1/2 p-8 relative text-white">
-          {/* Close button */}
           <button
             className="absolute p-1 top-3 right-3 text-gray-400 hover:text-white cursor-pointer hover:border hover:rounded-2xl hover:bg-yellow-600 transition"
             onClick={onClose}
@@ -52,71 +112,67 @@ const AuthModal = ({ isOpen, onClose }) => {
             </button>
           </div>
 
+          {/* Message */}
+          {message && <p className="mb-2 text-yellow-400">{message}</p>}
+
           {/* Login Form */}
           {isLogin ? (
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleLogin}>
               <input
                 type="email"
-                placeholder="Email / Username"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-yellow-500 placeholder-gray-400"
+                required
               />
               <input
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-yellow-500 placeholder-gray-400"
+                required
               />
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input type="checkbox" className="h-4 w-4" />
-                  <span>Remember me</span>
-                </label>
-                <a href="#" className="text-yellow-400 hover:underline">
-                  Forgot Password?
-                </a>
-              </div>
               <button className="w-full py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 cursor-pointer">
                 Sign In
               </button>
             </form>
           ) : (
             /* Signup Form */
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSignup}>
               <input
                 type="text"
                 placeholder="Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-yellow-500 placeholder-gray-400"
+                required
               />
               <input
                 type="email"
                 placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-yellow-500 placeholder-gray-400"
+                required
               />
               <input
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-yellow-500 placeholder-gray-400"
+                required
               />
               <input
                 type="password"
                 placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-yellow-500 placeholder-gray-400"
+                required
               />
-
-              {/* Terms of Service Checkbox */}
-              <label className="flex items-center space-x-2 text-sm cursor-pointer">
-                <input type="checkbox" className="h-4 w-4" />
-                <span>
-                  I accept the{" "}
-                  <a href="#" className="text-yellow-400 hover:underline">
-                    Terms of Service
-                  </a>{" "}
-                  and{" "}
-                  <a href="#" className="text-yellow-400 hover:underline">
-                    Privacy Policy
-                  </a>
-                </span>
-              </label>
-
               <button className="w-full py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 cursor-pointer">
                 Sign Up
               </button>

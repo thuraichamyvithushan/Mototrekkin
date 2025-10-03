@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import axios from "axios";
-import Mlogo from "../assets/services/mlogo.webp"; 
+import React, { useState, useContext } from "react";
+import axios from "../axiosConfig";
+import Mlogo from "../assets/services/mlogo.webp";
+import { AuthContext } from "./AuthContext"
 
 // Vertical Radio Button Component
 const RadioField = ({ label, name, value, onChange, options }) => (
@@ -25,70 +26,113 @@ const RadioField = ({ label, name, value, onChange, options }) => (
 );
 
 const ServiceBookingForm = () => {
+  const { user } = useContext(AuthContext);
+
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    firstName: "", lastName: "", email: "", mobileNumber: "",
-    workPhone: "", homePhone: "", streetAddress: "", streetAddress2: "",
-    city: "", state: "", postCode: "",
-    motorcycleMake: "", motorcycleModel: "", motorcycleYear: "",
-    registrationState: "", regoPlate: "", vinNumber: "", regoExpiry: "",
-    currentKms: "", lastServiceDate: "",
-    ongoingFaults: "", faultsDescription: "",
+    firstName: user?.fullName?.split(" ")[0] || "",
+    lastName: user?.fullName?.split(" ").slice(1).join(" ") || "",
+    email: user?.email || "",
+    mobileNumber: "",
+    workPhone: "",
+    homePhone: "",
+    streetAddress: "",
+    streetAddress2: "",
+    city: "",
+    state: "",
+    postCode: "",
+    motorcycleMake: "",
+    motorcycleModel: "",
+    motorcycleYear: "",
+    registrationState: "",
+    regoPlate: "",
+    vinNumber: "",
+    regoExpiry: "",
+    currentKms: "",
+    lastServiceDate: "",
+    ongoingFaults: "",
+    faultsDescription: "",
     summaryOfWork: "",
     newTyres: "no",
     tyreDetails: { Width: "", Height: "", rimSize: "", backWidth: "", backHeight: "", backrimSize: "" },
-    newTube: "no", spokeCheck: "no", preFiltersInstalled: "no",
-    uhfBluetooth: "no", extraGearFitted: "no", suspensionMods: "no",
-    preferredDateTime: "", collectionNeeded: "",
+    newTube: "no",
+    spokeCheck: "no",
+    preFiltersInstalled: "no",
+    uhfBluetooth: "no",
+    extraGearFitted: "no",
+    suspensionMods: "no",
+    preferredDateTime: "",
+    collectionNeeded: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name.startsWith("tyreDetails.")) {
       const key = name.split(".")[1];
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         tyreDetails: { ...prev.tyreDetails, [key]: value },
       }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleNext = () => setStep(prev => prev + 1);
-  const handlePrev = () => setStep(prev => prev - 1);
+  const handleNext = () => setStep((prev) => prev + 1);
+  const handlePrev = () => setStep((prev) => prev - 1);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const payload = {
+        userId: user?.userId,
         ...formData,
         preferredDateTime: formData.preferredDateTime ? new Date(formData.preferredDateTime) : null,
         lastServiceDate: formData.lastServiceDate ? new Date(formData.lastServiceDate) : null,
         regoExpiry: formData.regoExpiry ? new Date(formData.regoExpiry) : null,
-        currentKms: formData.currentKms ? Number(formData.currentKms) : undefined
+        currentKms: formData.currentKms ? Number(formData.currentKms) : undefined,
       };
 
       await axios.post("http://localhost:5000/api/bookings", payload, {
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
 
       alert("Booking submitted successfully!");
       setStep(1);
       setFormData({
-        firstName: "", lastName: "", email: "", mobileNumber: "",
-        workPhone: "", homePhone: "", streetAddress: "", streetAddress2: "",
-        city: "", state: "", postCode: "",
-        motorcycleMake: "", motorcycleModel: "", motorcycleYear: "",
-        registrationState: "", regoPlate: "", vinNumber: "", regoExpiry: "",
-        currentKms: "", lastServiceDate: "",
-        ongoingFaults: "", faultsDescription: "",
+        firstName: user?.fullName?.split(" ")[0] || "",
+        lastName: user?.fullName?.split(" ").slice(1).join(" ") || "",
+        email: user?.email || "",
+        mobileNumber: "",
+        workPhone: "",
+        homePhone: "",
+        streetAddress: "",
+        streetAddress2: "",
+        city: "",
+        state: "",
+        postCode: "",
+        motorcycleMake: "",
+        motorcycleModel: "",
+        motorcycleYear: "",
+        registrationState: "",
+        regoPlate: "",
+        vinNumber: "",
+        regoExpiry: "",
+        currentKms: "",
+        lastServiceDate: "",
+        ongoingFaults: "",
+        faultsDescription: "",
         summaryOfWork: "",
         newTyres: "no",
         tyreDetails: { Width: "", Height: "", rimSize: "", backWidth: "", backHeight: "", backrimSize: "" },
-        newTube: "no", spokeCheck: "no", preFiltersInstalled: "no",
-        uhfBluetooth: "no", extraGearFitted: "no", suspensionMods: "no",
-        preferredDateTime: "", collectionNeeded: "",
+        newTube: "no",
+        spokeCheck: "no",
+        preFiltersInstalled: "no",
+        uhfBluetooth: "no",
+        extraGearFitted: "no",
+        suspensionMods: "no",
+        preferredDateTime: "",
+        collectionNeeded: "",
       });
     } catch (error) {
       console.error(error.response?.data || error.message);
@@ -96,7 +140,7 @@ const ServiceBookingForm = () => {
     }
   };
 
-  const renderInput = (label, name, type = "text", required = false) => (
+  const renderInput = (label, name, type = "text", required = false, readOnly = false) => (
     <div className="flex flex-col w-full">
       <label className="font-medium">{label}</label>
       <input
@@ -106,6 +150,7 @@ const ServiceBookingForm = () => {
         onChange={handleChange}
         className="w-full p-3 border-b border-gray-400 focus:outline-none focus:border-[#edab1a]"
         required={required}
+        readOnly={readOnly}
       />
     </div>
   );
@@ -121,7 +166,7 @@ const ServiceBookingForm = () => {
         required={required}
       >
         <option value="">Select</option>
-        {["ACT", "NSW", "VIC", "QLD", "NT", "WA", "TAS", "SA"].map(st => (
+        {["ACT", "NSW", "VIC", "QLD", "NT", "WA", "TAS", "SA"].map((st) => (
           <option key={st} value={st}>{st}</option>
         ))}
       </select>
@@ -129,14 +174,29 @@ const ServiceBookingForm = () => {
   );
 
   const isStepValid = () => {
-    switch(step) {
+    switch (step) {
       case 1:
-        return formData.firstName && formData.lastName && formData.email && formData.mobileNumber && formData.streetAddress && formData.city && formData.state && formData.postCode;
+        return (
+          formData.firstName &&
+          formData.lastName &&
+          formData.email &&
+          formData.mobileNumber &&
+          formData.streetAddress &&
+          formData.city &&
+          formData.state &&
+          formData.postCode
+        );
       case 2:
-        const faultOk = formData.ongoingFaults === "no" || (formData.ongoingFaults === "yes" && formData.faultsDescription);
+        const faultOk =
+          formData.ongoingFaults === "no" ||
+          (formData.ongoingFaults === "yes" && formData.faultsDescription);
         return formData.motorcycleMake && formData.motorcycleModel && formData.registrationState && faultOk;
       case 3:
-        return formData.summaryOfWork && formData.newTyres && (formData.newTyres === "no" || Object.values(formData.tyreDetails).every(v => v !== ""));
+        return (
+          formData.summaryOfWork &&
+          formData.newTyres &&
+          (formData.newTyres === "no" || Object.values(formData.tyreDetails).every((v) => v !== ""))
+        );
       case 4:
         return formData.preferredDateTime && formData.collectionNeeded;
       default:
@@ -150,32 +210,26 @@ const ServiceBookingForm = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-20" style={{ fontFamily: "'Montserrat', sans-serif" }}>
       <div className="mb-8">
-        <img src={Mlogo} alt="Motorcycle Service" className="mx-auto w-48 h-auto rounded-lg " />
+        <img src={Mlogo} alt="Motorcycle Service" className="mx-auto w-48 h-auto rounded-lg" />
       </div>
-
-
       <form className="w-full space-y-8" onSubmit={handleSubmit}>
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">
           BOOK A MOTORCYCLE SERVICE OR REPAIR
         </h2>
-
-        {/* Step Indicator */}
         <div className="flex justify-between mb-8">
-          {[1, 2, 3, 4].map(s => (
+          {[1, 2, 3, 4].map((s) => (
             <div key={s} className={`flex-1 h-1 mx-1 ${step >= s ? "bg-[#edab1a]" : "bg-gray-300"}`} />
           ))}
         </div>
-
-        {/* Steps 1–4 */}
         {step === 1 && (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold">PERSONAL DETAILS</h3>
             <hr className="border-t border-gray-300 mt-2 mb-10" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {renderInput("First Name", "firstName", "text", true)}
-              {renderInput("Last Name", "lastName", "text", true)}
+              {renderInput("First Name", "firstName", "text", true, true)}
+              {renderInput("Last Name", "lastName", "text", true, true)}
             </div>
-            <div className="w-full">{renderInput("Email", "email", "email", true)}</div>
+            <div className="w-full">{renderInput("Email", "email", "email", true, true)}</div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {renderInput("Mobile Number", "mobileNumber", "text", true)}
               {renderInput("Work Phone", "workPhone")}
@@ -189,11 +243,17 @@ const ServiceBookingForm = () => {
               {renderInput("Post Code", "postCode", "text", true)}
             </div>
             <div className="flex justify-end">
-              <button type="button" disabled={!isStepValid()} onClick={handleNext} className={getButtonClass(isStepValid())}>Next</button>
+              <button
+                type="button"
+                disabled={!isStepValid()}
+                onClick={handleNext}
+                className={getButtonClass(isStepValid())}
+              >
+                Next
+              </button>
             </div>
           </div>
         )}
-
         {step === 2 && (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold">MOTORCYCLE DETAILS</h3>
@@ -214,7 +274,13 @@ const ServiceBookingForm = () => {
             </div>
             {renderInput("Last Service Date", "lastServiceDate", "date")}
             <h3 className="text-xl font-semibold mt-4">Ongoing Faults</h3>
-            <RadioField label="Ongoing Faults" name="ongoingFaults" value={formData.ongoingFaults} onChange={handleChange} options={["yes", "no"]} />
+            <RadioField
+              label="Ongoing Faults"
+              name="ongoingFaults"
+              value={formData.ongoingFaults}
+              onChange={handleChange}
+              options={["yes", "no"]}
+            />
             {formData.ongoingFaults === "yes" && (
               <div className="flex flex-col mt-2">
                 <label className="font-medium">Faults Description</label>
@@ -228,12 +294,20 @@ const ServiceBookingForm = () => {
               </div>
             )}
             <div className="flex justify-between mt-4">
-              <button type="button" onClick={handlePrev} className="bg-gray-300 px-6 py-2">Previous</button>
-              <button type="button" disabled={!isStepValid()} onClick={handleNext} className={getButtonClass(isStepValid())}>Next</button>
+              <button type="button" onClick={handlePrev} className="bg-gray-300 px-6 py-2">
+                Previous
+              </button>
+              <button
+                type="button"
+                disabled={!isStepValid()}
+                onClick={handleNext}
+                className={getButtonClass(isStepValid())}
+              >
+                Next
+              </button>
             </div>
           </div>
         )}
-
         {step === 3 && (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold">SERVICE DETAILS</h3>
@@ -248,27 +322,56 @@ const ServiceBookingForm = () => {
               />
             </div>
             <h1 className="font-black text-2xl">Do you require the following:</h1>
-            <RadioField label="New Tyres" name="newTyres" value={formData.newTyres} onChange={handleChange} options={["yes", "no", "maybe"]} />
+            <RadioField
+              label="New Tyres"
+              name="newTyres"
+              value={formData.newTyres}
+              onChange={handleChange}
+              options={["yes", "no", "maybe"]}
+            />
             {formData.newTyres !== "no" && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {["Width", "Height", "rimSize", "backWidth", "backHeight", "backrimSize"].map(f => (
+                {["Width", "Height", "rimSize", "backWidth", "backHeight", "backrimSize"].map((f) => (
                   <div key={f} className="flex flex-col">
                     <label className="font-medium">{f}</label>
-                    <input type="text" name={`tyreDetails.${f}`} value={formData.tyreDetails[f]} onChange={handleChange} className="w-full p-3 border-b border-gray-400 focus:outline-none focus:border-[#edab1a]" />
+                    <input
+                      type="text"
+                      name={`tyreDetails.${f}`}
+                      value={formData.tyreDetails[f]}
+                      onChange={handleChange}
+                      className="w-full p-3 border-b border-gray-400 focus:outline-none focus:border-[#edab1a]"
+                    />
                   </div>
                 ))}
               </div>
             )}
-            {["newTube", "spokeCheck", "preFiltersInstalled", "uhfBluetooth", "extraGearFitted", "suspensionMods"].map(key => (
-              <RadioField key={key} label={key.replace(/([A-Z])/g, ' $1')} name={key} value={formData[key]} onChange={handleChange} options={["yes", "no", "maybe"]} />
-            ))}
+            {["newTube", "spokeCheck", "preFiltersInstalled", "uhfBluetooth", "extraGearFitted", "suspensionMods"].map(
+              (key) => (
+                <RadioField
+                  key={key}
+                  label={key.replace(/([A-Z])/g, " $1")}
+                  name={key}
+                  value={formData[key]}
+                  onChange={handleChange}
+                  options={["yes", "no", "maybe"]}
+                />
+              )
+            )}
             <div className="flex justify-between mt-4">
-              <button type="button" onClick={handlePrev} className="bg-gray-300 px-6 py-2">Previous</button>
-              <button type="button" disabled={!isStepValid()} onClick={handleNext} className={getButtonClass(isStepValid())}>Next</button>
+              <button type="button" onClick={handlePrev} className="bg-gray-300 px-6 py-2">
+                Previous
+              </button>
+              <button
+                type="button"
+                disabled={!isStepValid()}
+                onClick={handleNext}
+                className={getButtonClass(isStepValid())}
+              >
+                Next
+              </button>
             </div>
           </div>
         )}
-
         {step === 4 && (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold">CHOOSE YOUR PREFERRED DROP OFF DATE AND TIME</h3>
@@ -282,8 +385,14 @@ const ServiceBookingForm = () => {
               options={["critical - Next few days", "urgent - Next 7 days", "soon - Next fortnight", "no hurry - Next 30 days"]}
             />
             <div className="flex justify-between mt-4">
-              <button type="button" onClick={handlePrev} className="bg-gray-300 px-6 py-2">Previous</button>
-              <button type="submit" disabled={!isStepValid()} className={`px-6 py-2 ${isStepValid() ? "bg-[#edab1a] text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}>
+              <button type="button" onClick={handlePrev} className="bg-gray-300 px-6 py-2">
+                Previous
+              </button>
+              <button
+                type="submit"
+                disabled={!isStepValid()}
+                className={getButtonClass(isStepValid())}
+              >
                 Submit Booking
               </button>
             </div>

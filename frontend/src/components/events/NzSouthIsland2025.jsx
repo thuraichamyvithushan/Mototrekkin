@@ -68,9 +68,11 @@ const NzSouthIsland2025 = () => {
 
       {/* Register Button */}
       <div className="text-center mb-6">
+        <a href="/adventures/nzsi-2025/registration">
         <button className="bg-green-700 text-white px-10 py-3 rounded-lg text-lg font-semibold hover:bg-green-800 transition-colors duration-300">
           REGISTER NOW
         </button>
+        </a>
       </div>
 
       {/* Event Details */}
@@ -224,9 +226,11 @@ and Request info kit for full details</p>
 
     {/* Register Button */}
       <div className="text-center mb-6">
+        <a href="/adventures/nzsi-2025/registration">
         <button className="bg-green-700 text-white px-10 py-3 rounded-lg text-lg font-semibold hover:bg-green-800 transition-colors duration-300">
           REGISTER NOW
         </button>
+        </a>
       </div>
     </div>
   );

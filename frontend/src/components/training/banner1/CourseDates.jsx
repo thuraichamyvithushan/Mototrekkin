@@ -69,54 +69,54 @@ const CourseDates = () => {
 
               {/* Table Body */}
               <tbody className="divide-y divide-gray-100">
-                {/* January */}
+                {/* January - SOLD OUT */}
                 <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">JANUARY</span>
+                      <span className="text-lg font-semibold text-red-600">JANUARY</span>
                     </div>
                   </td>
-                  <td className="py-6 px-8 text-gray-600">NO COURSE AVAILABLE</td>
+                  <td className="py-6 px-8 text-red-600">NO COURSE AVAILABLE</td>
                   <td className="py-6 px-8">
                     <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
                       SOLD OUT
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="text-gray-400 text-sm">-</span>
+                    <span className="text-red-400 text-sm">-</span>
                   </td>
                 </tr>
 
-                {/* February */}
+                {/* February - SOLD OUT */}
                 <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">FEBRUARY</span>
+                      <span className="text-lg font-semibold text-red-600">FEBRUARY</span>
                     </div>
                   </td>
-                  <td className="py-6 px-8 text-gray-600">NO COURSE AVAILABLE</td>
+                  <td className="py-6 px-8 text-red-600">NO COURSE AVAILABLE</td>
                   <td className="py-6 px-8">
                     <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
                       SOLD OUT
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="text-gray-400 text-sm">-</span>
+                    <span className="text-red-400 text-sm">-</span>
                   </td>
                 </tr>
 
-                {/* March */}
+                {/* March - SOLD OUT */}
                 <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">MAR. 28,29,30</span>
+                      <span className="text-lg font-semibold text-red-600">MAR. 28,29,30</span>
                     </div>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
                       MDP Phase I
                     </span>
                   </td>
@@ -126,20 +126,20 @@ const CourseDates = () => {
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="text-gray-400 text-sm">-</span>
+                    <span className="text-red-400 text-sm">-</span>
                   </td>
                 </tr>
 
-                {/* April */}
+                {/* April - SOLD OUT */}
                 <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">APR. 25,26,27</span>
+                      <span className="text-lg font-semibold text-red-600">APR. 25,26,27</span>
                     </div>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
                       MDP Phase II
                     </span>
                   </td>
@@ -149,20 +149,20 @@ const CourseDates = () => {
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="text-gray-400 text-sm">-</span>
+                    <span className="text-red-400 text-sm">-</span>
                   </td>
                 </tr>
 
-                {/* May */}
+                {/* May - SOLD OUT */}
                 <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">MAY 23,24,25</span>
+                      <span className="text-lg font-semibold text-red-600">MAY 23,24,25</span>
                     </div>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
                       MDP Phase I
                     </span>
                   </td>
@@ -172,112 +172,100 @@ const CourseDates = () => {
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="text-gray-400 text-sm">-</span>
+                    <span className="text-red-400 text-sm">-</span>
                   </td>
                 </tr>
 
-                {/* June */}
-                <tr className="hover:bg-gradient-to-r hover:from-orange-50 hover:to-yellow-50 transition-all duration-300">
+                {/* June - SOLD OUT */}
+                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
-                      <div className="w-3 h-3 bg-orange-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">JUNE 27,28,29</span>
+                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
+                      <span className="text-lg font-semibold text-red-600">JUNE 27,28,29</span>
                     </div>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
                       MDP Phase II
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-orange-100 text-orange-800 border border-orange-200">
-                      90% SOLD
+                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
+                      SOLD OUT
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <a 
-                      href="https://www.mototrekkin.com.au/registration-form/registration-mdp-phase-2" 
-                      className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold rounded-lg text-sm transition-all duration-300 transform hover:scale-105 shadow-lg"
-                    >
-                      BOOK NOW
-                      <ExternalLink className="w-4 h-4 ml-2" />
-                    </a>
+                    <span className="text-red-400 text-sm">-</span>
                   </td>
                 </tr>
 
-                {/* July */}
+                {/* July - SOLD OUT */}
                 <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">JULY</span>
+                      <span className="text-lg font-semibold text-red-600">JULY</span>
                     </div>
                   </td>
-                  <td className="py-6 px-8 text-gray-600">NO COURSE AVAILABLE</td>
+                  <td className="py-6 px-8 text-red-600">NO COURSE AVAILABLE</td>
                   <td className="py-6 px-8">
                     <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
                       SOLD OUT
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="text-gray-400 text-sm">-</span>
+                    <span className="text-red-400 text-sm">-</span>
                   </td>
                 </tr>
 
-                {/* August */}
+                {/* August - SOLD OUT */}
                 <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">AUGUST</span>
+                      <span className="text-lg font-semibold text-red-600">AUGUST</span>
                     </div>
                   </td>
-                  <td className="py-6 px-8 text-gray-600">NO COURSE AVAILABLE</td>
+                  <td className="py-6 px-8 text-red-600">NO COURSE AVAILABLE</td>
                   <td className="py-6 px-8">
                     <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
                       SOLD OUT
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="text-gray-400 text-sm">-</span>
+                    <span className="text-red-400 text-sm">-</span>
                   </td>
                 </tr>
 
-                {/* September */}
-                <tr className="hover:bg-gradient-to-r hover:from-orange-50 hover:to-yellow-50 transition-all duration-300">
+                {/* September - SOLD OUT */}
+                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
-                      <div className="w-3 h-3 bg-orange-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">SEPT. 26,27,28</span>
+                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
+                      <span className="text-lg font-semibold text-red-600">SEPT. 26,27,28</span>
                     </div>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
                       MDP Phase I
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-orange-100 text-orange-800 border border-orange-200">
-                      90% SOLD
+                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
+                      SOLD OUT
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <a 
-                      href="https://www.mototrekkin.com.au/registration-form/registration-masterclass/" 
-                      className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold rounded-lg text-sm transition-all duration-300 transform hover:scale-105 shadow-lg"
-                    >
-                      BOOK NOW
-                      <ExternalLink className="w-4 h-4 ml-2" />
-                    </a>
+                    <span className="text-red-400 text-sm">-</span>
                   </td>
                 </tr>
 
-                {/* October */}
+                {/* October - AVAILABLE */}
                 <tr className="hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-green-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">OCT. 24,25,26</span>
+                      <span className="text-lg font-semibold text-green-600">OCT. 24,25,26</span>
                     </div>
                   </td>
                   <td className="py-6 px-8">
@@ -292,7 +280,7 @@ const CourseDates = () => {
                   </td>
                   <td className="py-6 px-8">
                     <a 
-                      href="https://www.mototrekkin.com.au/registration-form/registration-mdp-phase-2" 
+                      href="/registration-mdp-phase-2" 
                       className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold rounded-lg text-sm transition-all duration-300 transform hover:scale-105 shadow-lg"
                     >
                       BOOK NOW
@@ -301,16 +289,16 @@ const CourseDates = () => {
                   </td>
                 </tr>
 
-                {/* November */}
+                {/* November - AVAILABLE */}
                 <tr className="hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-green-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">NOV. 28,29,30</span>
+                      <span className="text-lg font-semibold text-green-600">NOV. 28,29,30</span>
                     </div>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
                       MDP Phase III
                     </span>
                   </td>
@@ -321,7 +309,7 @@ const CourseDates = () => {
                   </td>
                   <td className="py-6 px-8">
                     <a 
-                      href="https://www.mototrekkin.com.au/registration-form/registration-mdp-phase-3" 
+                      href="/registration-mdp-phase-3" 
                       className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold rounded-lg text-sm transition-all duration-300 transform hover:scale-105 shadow-lg"
                     >
                       BOOK NOW
@@ -330,22 +318,22 @@ const CourseDates = () => {
                   </td>
                 </tr>
 
-                {/* December */}
+                {/* December - SOLD OUT */}
                 <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
                   <td className="py-6 px-8">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-gray-800">DECEMBER</span>
+                      <span className="text-lg font-semibold text-red-600">DECEMBER</span>
                     </div>
                   </td>
-                  <td className="py-6 px-8 text-gray-600">NO COURSE AVAILABLE</td>
+                  <td className="py-6 px-8 text-red-600">NO COURSE AVAILABLE</td>
                   <td className="py-6 px-8">
                     <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
                       SOLD OUT
                     </span>
                   </td>
                   <td className="py-6 px-8">
-                    <span className="text-gray-400 text-sm">-</span>
+                    <span className="text-red-400 text-sm">-</span>
                   </td>
                 </tr>
               </tbody>
@@ -357,7 +345,7 @@ const CourseDates = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 animate-fade-in-up animation-delay-1000">
           <div className="bg-gradient-to-br from-red-500/10 to-pink-500/10 backdrop-blur-sm border border-red-200 rounded-2xl p-6 text-center">
             <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-lg">7</span>
+              <span className="text-white font-bold text-lg">9</span>
             </div>
             <h3 className="text-lg font-bold text-red-800 mb-2">SOLD OUT</h3>
             <p className="text-red-600 text-sm">Months fully booked</p>
@@ -365,7 +353,7 @@ const CourseDates = () => {
 
           <div className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 backdrop-blur-sm border border-orange-200 rounded-2xl p-6 text-center">
             <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-lg">2</span>
+              <span className="text-white font-bold text-lg">0</span>
             </div>
             <h3 className="text-lg font-bold text-orange-800 mb-2">90% SOLD</h3>
             <p className="text-orange-600 text-sm">Limited spots remaining</p>

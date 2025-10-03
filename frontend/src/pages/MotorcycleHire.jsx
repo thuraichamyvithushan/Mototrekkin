@@ -6,10 +6,11 @@ import exploreImg from "../assets/hire/hire-to-explore.webp";
 import bike1 from "../assets/hire/bike-CRF250-Rally.jpg";
 import bike2 from "../assets/hire/G310-GS-1.jpg";
 import bike3 from "../assets/hire/Honda-CB500X-1.jpg";
+import MotorcycleHireForm from "../components/bookingforms/MotorcycleHireForm";
 
 const MotorcycleHire = () => {
   return (
-    <section className="max-w-5xl mx-auto">
+    <section className="max-w-6xl mx-auto">
       {/* Top Banner */}
       <div className="relative w-full pt-10 px-2">
         <img
@@ -21,7 +22,7 @@ const MotorcycleHire = () => {
       </div>
 
       {/* 3 Column Cards */}
-     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-12 max-w-5xl mx-auto p-2">
+     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-12 max-w-6xl mx-auto p-2">
   {/* Card 1 */}
   <div className="bg-white shadow-md rounded-lg overflow-hidden">
     <div className="overflow-hidden">
@@ -35,7 +36,7 @@ const MotorcycleHire = () => {
       <h3 className="text-lg font-bold text-gray-800 mb-2">
         HIRE FOR EVENTS
       </h3>
-      <p className="text-gray-600 text-sm">
+      <p className="text-gray-600 text-lg">
         Hire your choice of motorcycle and join us on any of our off-road
         events. Available for weekend, or week-long events.
       </p>
@@ -55,7 +56,7 @@ const MotorcycleHire = () => {
       <h3 className="text-lg font-bold text-gray-800 mb-2">
         HIRE FOR TRAINING
       </h3>
-      <p className="text-gray-600 text-sm">
+      <p className="text-gray-600 text-lg">
         If you’ve owned a road bike and want a new lease on life or want
         to improve your off-road skills to boost your confidence.
       </p>
@@ -75,7 +76,7 @@ const MotorcycleHire = () => {
       <h3 className="text-lg font-bold text-gray-800 mb-2">
         HIRE TO EXPLORE
       </h3>
-      <p className="text-gray-600 text-sm">
+      <p className="text-gray-600 text-lg">
         Ride in luxury and with plenty of power for one or two up, on any
         one of our BMW 1200 or 1250' BMW GS fleet.
       </p>
@@ -84,7 +85,7 @@ const MotorcycleHire = () => {
 </div>
 
 
-        <div className="flex flex-col lg:flex-row p-6 justify-between items-center bg-white max-w-5xl mx-auto mb-6">
+        <div className="flex flex-col lg:flex-row p-6 justify-between items-center bg-white max-w-6xl mx-auto mb-6">
             <div className=" p-6 text-left ">
                 <h3 className="text-xl font-bold text-yellow-500 mb-2">
                 Ride to your heart’s content
@@ -97,14 +98,16 @@ const MotorcycleHire = () => {
                 </h2>
             </div>
         <div className="p-6">
-                <button className="bg-yellow-500 py-4 px-4 w-40 rounded-lg hover:bg-gray-900 hover:text-white">
+          <a href="/event-calendar-2025" className="">
+                <button className="bg-yellow-500 py-4 px-4 w-40 rounded-lg hover:bg-gray-900 hover:text-white cursor-pointer">
                     Event Details
                 </button>
+                </a>
             </div>
           </div>
 
 {/* 3 Column bikes */}
-<div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-12 max-w-5xl mx-auto p-2">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-12 max-w-6xl mx-auto p-2">
   {/* bike 1 */}
   <div className="bg-white shadow-md rounded-lg overflow-hidden">
     <div className="overflow-hidden">
@@ -155,6 +158,7 @@ const MotorcycleHire = () => {
 {/* hire section */}
 <div className="flex flex-col justify-center items-center">
     <h1 className="text-4xl text-yellow-600">START HERE</h1>
+    <MotorcycleHireForm/>
 </div>
 
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -16,43 +16,32 @@ import Payment from "../../components/dashboard/Payment";
 import AccountDetails from "../../components/dashboard/AccountDetails";
 import Vouchers from "../../components/dashboard/Vouchers";
 import UserDashboardDefaultData from "../../components/dashboard/UserDashboardDefaultData";
+import { AuthContext } from "../../components/AuthContext"
 
 const UserDashboard = () => {
+  const { user, logout } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("dashboard");
+
+  const handleLogout = () => {
+    logout();
+  };
 
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
-        return (
-          <div>
-            <UserDashboardDefaultData/>
-          </div>
-        );
+        return <UserDashboardDefaultData />;
       case "orders":
-        return (
-        <UserOrders/>
-            
-        );
+        return <UserOrders />;
       case "events":
-        return(
-            <UpcomingEvents/>
-        );
+        return <UpcomingEvents />;
       case "address":
-        return(
-            <Address/>
-        );
+        return <Address />;
       case "payment":
-        return (
-            <Payment/>
-        );
+        return <Payment />;
       case "account":
-        return (
-            <AccountDetails/>
-        );
+        return <AccountDetails />;
       case "vouchers":
-        return (
-            <Vouchers/>
-        );
+        return <Vouchers />;
       default:
         return null;
     }
@@ -60,11 +49,13 @@ const UserDashboard = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <aside className="w-64 bg-white border-r">
         <div className="p-6 flex flex-col items-center">
-          <h2 className="font-semibold text-lg mb-2">mithu.shan</h2>
-          <button className="bg-red-500 text-white px-4 py-1 rounded">
+          <h2 className="font-semibold text-lg mb-2">{user?.fullName || "User"}</h2>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-4 py-1 rounded"
+          >
             LOGOUT
           </button>
         </div>
@@ -155,15 +146,16 @@ const UserDashboard = () => {
               </button>
             </li>
             <li>
-              <button className="flex items-center w-full px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+              <button
+                onClick={handleLogout}
+                className="flex items-center w-full px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              >
                 <LogOut className="w-5 h-5 mr-2" /> Logout
               </button>
             </li>
           </ul>
         </nav>
       </aside>
-
-      {/* Main content */}
       <main className="flex-1 p-8">{renderContent()}</main>
     </div>
   );
