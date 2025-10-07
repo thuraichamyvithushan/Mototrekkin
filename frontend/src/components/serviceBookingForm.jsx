@@ -81,64 +81,89 @@ const ServiceBookingForm = () => {
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrev = () => setStep((prev) => prev - 1);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const payload = {
-        userId: user?.userId,
-        ...formData,
-        preferredDateTime: formData.preferredDateTime ? new Date(formData.preferredDateTime) : null,
-        lastServiceDate: formData.lastServiceDate ? new Date(formData.lastServiceDate) : null,
-        regoExpiry: formData.regoExpiry ? new Date(formData.regoExpiry) : null,
-        currentKms: formData.currentKms ? Number(formData.currentKms) : undefined,
-      };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const payload = {
+      userId: user?.id, // Changed from user.userId to user.id
+      ...formData,
+      preferredDateTime: formData.preferredDateTime ? new Date(formData.preferredDateTime) : null,
+      lastServiceDate: formData.lastServiceDate ? new Date(formData.lastServiceDate) : null,
+      regoExpiry: formData.regoExpiry ? new Date(formData.regoExpiry) : null,
+      currentKms: formData.currentKms ? Number(formData.currentKms) : undefined,
+    };
 
-      await axios.post("http://localhost:5000/api/bookings", payload, {
-        headers: { "Content-Type": "application/json" },
-      });
+    console.log("ServiceBookingForm: Submitting booking", { userId: user?.id, payload });
 
-      alert("Booking submitted successfully!");
-      setStep(1);
-      setFormData({
-        firstName: user?.fullName?.split(" ")[0] || "",
-        lastName: user?.fullName?.split(" ").slice(1).join(" ") || "",
-        email: user?.email || "",
-        mobileNumber: "",
-        workPhone: "",
-        homePhone: "",
-        streetAddress: "",
-        streetAddress2: "",
-        city: "",
-        state: "",
-        postCode: "",
-        motorcycleMake: "",
-        motorcycleModel: "",
-        motorcycleYear: "",
-        registrationState: "",
-        regoPlate: "",
-        vinNumber: "",
-        regoExpiry: "",
-        currentKms: "",
-        lastServiceDate: "",
-        ongoingFaults: "",
-        faultsDescription: "",
-        summaryOfWork: "",
-        newTyres: "no",
-        tyreDetails: { Width: "", Height: "", rimSize: "", backWidth: "", backHeight: "", backrimSize: "" },
-        newTube: "no",
-        spokeCheck: "no",
-        preFiltersInstalled: "no",
-        uhfBluetooth: "no",
-        extraGearFitted: "no",
-        suspensionMods: "no",
-        preferredDateTime: "",
-        collectionNeeded: "",
-      });
-    } catch (error) {
-      console.error(error.response?.data || error.message);
-      alert("Failed to submit booking.");
+    const response = await axios.post("http://localhost:5000/api/bookings", payload, {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    console.log("ServiceBookingForm: Booking submitted successfully", response.data);
+
+    // Construct success message based on email status
+    let message = "Booking submitted successfully!";
+    if (response.data.emailStatus) {
+      const { userEmailSent, adminEmailSent, errors } = response.data.emailStatus;
+      if (userEmailSent && adminEmailSent) {
+        message += " Confirmation emails sent to you and the admin.";
+      } else if (userEmailSent) {
+        message += " Confirmation email sent to you, but admin email failed.";
+      } else if (adminEmailSent) {
+        message += " Confirmation email sent to admin, but user email failed.";
+      } else {
+        message += " Email notifications failed.";
+      }
+      if (errors.length > 0) {
+        console.warn("ServiceBookingForm: Email errors", errors);
+        message += " Some email notifications could not be sent.";
+      }
+    } else {
+      message += " Email notifications could not be sent.";
     }
-  };
+
+    alert(message);
+    setStep(1);
+    setFormData({
+      firstName: user?.fullName?.split(" ")[0] || "",
+      lastName: user?.fullName?.split(" ").slice(1).join(" ") || "",
+      email: user?.email || "",
+      mobileNumber: "",
+      workPhone: "",
+      homePhone: "",
+      streetAddress: "",
+      streetAddress2: "",
+      city: "",
+      state: "",
+      postCode: "",
+      motorcycleMake: "",
+      motorcycleModel: "",
+      motorcycleYear: "",
+      registrationState: "",
+      regoPlate: "",
+      vinNumber: "",
+      regoExpiry: "",
+      currentKms: "",
+      lastServiceDate: "",
+      ongoingFaults: "",
+      faultsDescription: "",
+      summaryOfWork: "",
+      newTyres: "no",
+      tyreDetails: { Width: "", Height: "", rimSize: "", backWidth: "", backHeight: "", backrimSize: "" },
+      newTube: "no",
+      spokeCheck: "no",
+      preFiltersInstalled: "no",
+      uhfBluetooth: "no",
+      extraGearFitted: "no",
+      suspensionMods: "no",
+      preferredDateTime: "",
+      collectionNeeded: "",
+    });
+  } catch (error) {
+    console.error("ServiceBookingForm: Failed to submit booking", error.response?.data || error.message);
+    alert(error.response?.data?.message || "Failed to submit booking.");
+  }
+};
 
   const renderInput = (label, name, type = "text", required = false, readOnly = false) => (
     <div className="flex flex-col w-full">

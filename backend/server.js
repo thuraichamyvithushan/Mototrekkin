@@ -9,6 +9,15 @@ import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
+console.log("Environment variables:", {
+  MONGO_URI: process.env.MONGO_URI ? "Set" : "Missing",
+  PORT: process.env.PORT,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY ? "Set" : "Missing",
+  EMAIL_USER: process.env.EMAIL_USER,
+  EMAIL_PASS: process.env.EMAIL_PASS,
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+});
+
 const app = express();
 app.use(cors());
 app.use(express.json());

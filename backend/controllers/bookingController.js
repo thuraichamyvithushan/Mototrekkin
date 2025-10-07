@@ -2,15 +2,6 @@
 import Booking from "../models/Booking.js";
 import nodemailer from "nodemailer";
 
-// Configure Nodemailer
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
 // Helper function to format date
 const formatDate = (date) => {
   return date ? new Date(date).toLocaleString("en-AU", { dateStyle: "medium", timeStyle: "short" }) : "N/A";
@@ -21,9 +12,55 @@ export const createBooking = async (req, res) => {
     const bookingData = { ...req.body, userId: req.user.id };
     console.log("bookingController: Creating booking", { userId: req.user.id, bookingData });
 
+    // Validate email configuration
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("bookingController: Email configuration missing", {
+        EMAIL_USER: process.env.EMAIL_USER,
+        EMAIL_PASS: process.env.EMAIL_PASS ? "Set" : "Missing",
+      });
+      return res.status(500).json({ message: "Email configuration missing" });
+    }
+
+    // Validate email addresses
+    if (!bookingData.email) {
+      console.error("bookingController: User email missing in bookingData");
+      return res.status(400).json({ message: "User email is required" });
+    }
+    if (!process.env.ADMIN_EMAIL) {
+      console.error("bookingController: ADMIN_EMAIL not set in .env");
+    }
+
     const booking = new Booking(bookingData);
     const savedBooking = await booking.save();
     console.log("bookingController: Booking saved", { bookingId: savedBooking._id });
+
+    // Configure Nodemailer inside the function
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false, // Use TLS
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Verify transporter
+    await new Promise((resolve, reject) => {
+      transporter.verify((error, success) => {
+        if (error) {
+          console.error("bookingController: Nodemailer configuration error", {
+            error: error.message,
+            EMAIL_USER: process.env.EMAIL_USER,
+            EMAIL_PASS: process.env.EMAIL_PASS ? "Set" : "Missing",
+          });
+          reject(error);
+        } else {
+          console.log("bookingController: Nodemailer configuration verified successfully");
+          resolve(success);
+        }
+      });
+    });
 
     // Prepare email content
     const userEmailContent = `
@@ -56,6 +93,8 @@ export const createBooking = async (req, res) => {
       Please review the booking and contact the user to confirm the appointment.
     `;
 
+    let emailStatus = { userEmailSent: false, adminEmailSent: false, errors: [] };
+
     // Send email to user
     try {
       await transporter.sendMail({
@@ -65,9 +104,13 @@ export const createBooking = async (req, res) => {
         text: userEmailContent,
       });
       console.log("bookingController: User email sent", { to: bookingData.email });
+      emailStatus.userEmailSent = true;
     } catch (emailErr) {
-      console.error("bookingController: Failed to send user email", emailErr.message);
-      // Continue to respond with success even if email fails
+      console.error("bookingController: Failed to send user email", {
+        to: bookingData.email,
+        error: emailErr.message,
+      });
+      emailStatus.errors.push(`User email failed: ${emailErr.message}`);
     }
 
     // Send email to admin
@@ -79,12 +122,20 @@ export const createBooking = async (req, res) => {
         text: adminEmailContent,
       });
       console.log("bookingController: Admin email sent", { to: process.env.ADMIN_EMAIL });
+      emailStatus.adminEmailSent = true;
     } catch (emailErr) {
-      console.error("bookingController: Failed to send admin email", emailErr.message);
-      // Continue to respond with success even if email fails
+      console.error("bookingController: Failed to send admin email", {
+        to: process.env.ADMIN_EMAIL,
+        error: emailErr.message,
+      });
+      emailStatus.errors.push(`Admin email failed: ${emailErr.message}`);
     }
 
-    res.status(201).json({ message: "Booking created successfully", bookingId: savedBooking._id });
+    res.status(201).json({
+      message: "Booking created successfully",
+      bookingId: savedBooking._id,
+      emailStatus,
+    });
   } catch (err) {
     console.error("bookingController: Failed to create booking", err.message);
     res.status(500).json({ message: "Failed to create booking", error: err.message });
