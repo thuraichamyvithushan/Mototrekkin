@@ -17,6 +17,7 @@ import AccountDetails from "../../components/dashboard/AccountDetails";
 import Vouchers from "../../components/dashboard/Vouchers";
 import UserDashboardDefaultData from "../../components/dashboard/UserDashboardDefaultData";
 import { AuthContext } from "../../components/AuthContext"
+import UserEventsNZSIRegistration from "../../components/dashboard/BikeHire";
 
 const UserDashboard = () => {
   const { user, logout } = useContext(AuthContext);
@@ -32,8 +33,10 @@ const UserDashboard = () => {
         return <UserDashboardDefaultData />;
       case "orders":
         return <UserOrders />;
+      case "Bike Hire":
+        return <UpcomingEvents />; 
       case "events":
-        return <UpcomingEvents />;
+        return <UserEventsNZSIRegistration />;
       case "address":
         return <Address />;
       case "payment":
@@ -83,6 +86,18 @@ const UserDashboard = () => {
                 }`}
               >
                 <ShoppingBag className="w-5 h-5 mr-2" /> Orders
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setActiveTab("Bike Hire")}
+                className={`flex items-center w-full px-3 py-2 rounded-lg ${
+                  activeTab === "Bike Hire"
+                    ? "bg-yellow-100 text-yellow-700 font-semibold"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                <ShoppingBag className="w-5 h-5 mr-2" /> Bike Hires
               </button>
             </li>
             <li>

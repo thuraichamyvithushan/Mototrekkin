@@ -701,6 +701,10 @@ const NZSIRegistrationForm = () => {
       
       if (isValid) {
         setCurrentStep(currentStep + 1);
+        // Scroll to top when moving to next step
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
       } else {
         // Scroll to the first error field
         setTimeout(() => {
@@ -720,6 +724,10 @@ const NZSIRegistrationForm = () => {
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      // Scroll to top when moving to previous step
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
     }
   };
 
@@ -730,6 +738,11 @@ const NZSIRegistrationForm = () => {
       
       // Show success message
       alert('Registration submitted successfully! We will contact you soon.');
+      
+      // Scroll to top after successful submission
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
       
       // Optionally redirect or reset the form
       // window.location.href = '/thank-you';
@@ -752,17 +765,17 @@ const NZSIRegistrationForm = () => {
     switch (currentStep) {
       case 1:
         return (
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">READ THE FOLLOWING BEFORE YOU START</h3>
+          <div className="space-y-4 sm:space-y-6">
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">READ THE FOLLOWING BEFORE YOU START</h3>
             
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-              <p className="text-sm text-yellow-800 font-semibold">
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 sm:p-4 mb-4 sm:mb-6">
+              <p className="text-xs sm:text-sm text-yellow-800 font-semibold">
                 <strong>THIS IS THE NZSI EVENT REGISTRATION PAGE - THIS IS NOT THE PAGE TO REQUEST EVENT INFORMATION. To request information about this event CLICK HERE</strong>
               </p>
             </div>
 
-            <div className="space-y-4 text-gray-700">
-              <p className="text-lg">
+            <div className="space-y-3 sm:space-y-4 text-gray-700">
+              <p className="text-base sm:text-lg">
                 Welcome to the New Zealand South Island 2025 (NZSI2025) registration page!
               </p>
               
@@ -783,59 +796,59 @@ const NZSIRegistrationForm = () => {
               </p>
             </div>
 
-            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
-              <h4 className="text-lg font-semibold text-blue-800 mb-2">ACCOMMODATION</h4>
-              <p className="text-sm text-blue-800">
+            <div className="bg-blue-50 border-l-4 border-blue-400 p-3 sm:p-4 mb-4 sm:mb-6">
+              <h4 className="text-base sm:text-lg font-semibold text-blue-800 mb-2">ACCOMMODATION</h4>
+              <p className="text-xs sm:text-sm text-blue-800">
                 Camping is not available on this event. Shared and private accommodation are the only two options
               </p>
             </div>
 
-            <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-6">
-              <h4 className="text-lg font-semibold text-green-800 mb-2">PAYMENT</h4>
-              <p className="text-sm text-green-800 mb-2">
+            <div className="bg-green-50 border-l-4 border-green-400 p-3 sm:p-4 mb-4 sm:mb-6">
+              <h4 className="text-base sm:text-lg font-semibold text-green-800 mb-2">PAYMENT</h4>
+              <p className="text-xs sm:text-sm text-green-800 mb-2">
                 We are offering three payment options which are:
               </p>
-              <div className="text-sm text-green-800 space-y-1">
+              <div className="text-xs sm:text-sm text-green-800 space-y-1">
                 <p><strong>Option 1</strong> - Three equal payments. Deposit upon registration followed by two additional equal payments scheduled on specific dates.</p>
                 <p><strong>Option 2</strong> - Full payment at the time of completing your registration</p>
                 <p><strong>Option 3</strong> - Payright - An interest free payment plan option over various length of time.</p>
               </div>
             </div>
 
-            <div className="bg-gray-50 border-l-4 border-gray-400 p-4 mb-6">
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">COMPLETING YOUR REGISTRATION</h4>
-              <p className="text-sm text-gray-800">
+            <div className="bg-gray-50 border-l-4 border-gray-400 p-3 sm:p-4 mb-4 sm:mb-6">
+              <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">COMPLETING YOUR REGISTRATION</h4>
+              <p className="text-xs sm:text-sm text-gray-800">
                 Completing your registration should take around 15 minutes and can be done using your desktop computer, tablet, or smartphone. Please ensure you provide accurate information when completing the form.
               </p>
             </div>
 
-            <div className="bg-orange-50 border-l-4 border-orange-400 p-4 mb-6">
-              <h4 className="text-lg font-semibold text-orange-800 mb-2">INFORMATION RECOMMENDATION</h4>
-              <p className="text-sm text-orange-800">
+            <div className="bg-orange-50 border-l-4 border-orange-400 p-3 sm:p-4 mb-4 sm:mb-6">
+              <h4 className="text-base sm:text-lg font-semibold text-orange-800 mb-2">INFORMATION RECOMMENDATION</h4>
+              <p className="text-xs sm:text-sm text-orange-800">
                 If you have not already done so please requested a copy of the full event information kit which outlines inclusions and pricing BEFORE you commence this registration process. Familiarise yourself with meal, accommodation and event inclusions as this event will have a different format and different inclusions to our previous events.
               </p>
             </div>
 
-            <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
-              <h4 className="text-lg font-semibold text-red-800 mb-2">BEFORE MAKING PAYMENT</h4>
-              <p className="text-sm text-red-800">
+            <div className="bg-red-50 border-l-4 border-red-400 p-3 sm:p-4 mb-4 sm:mb-6">
+              <h4 className="text-base sm:text-lg font-semibold text-red-800 mb-2">BEFORE MAKING PAYMENT</h4>
+              <p className="text-xs sm:text-sm text-red-800">
                 Please be aware that because of the nature of this event and the requirement for Moto Trekkin to book and pay for every aspect of the event in advance any payments you make are non refundable if you change your mind or your circumstances change. If this concerns you, or you are uncertain about your future commitments, DO NOT book this event.
               </p>
             </div>
 
-            <div className="bg-purple-50 border-l-4 border-purple-400 p-4 mb-6">
-              <h4 className="text-lg font-semibold text-purple-800 mb-2">EVENT TERMS AND CONDITIONS</h4>
-              <p className="text-sm text-purple-800">
+            <div className="bg-purple-50 border-l-4 border-purple-400 p-3 sm:p-4 mb-4 sm:mb-6">
+              <h4 className="text-base sm:text-lg font-semibold text-purple-800 mb-2">EVENT TERMS AND CONDITIONS</h4>
+              <p className="text-xs sm:text-sm text-purple-800">
                 Read the event terms and conditions when presented to you. To ensure fairness to all our participants, we administer our events in strict accordance with the event terms and conditions. Please invest the time necessary to read and understand how this particular event will be run.
               </p>
             </div>
 
-            <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 mb-6">
-              <h4 className="text-lg font-semibold text-indigo-800 mb-2">PREPARE BEFORE YOU BEGIN</h4>
-              <p className="text-sm text-indigo-800 mb-2">
+            <div className="bg-indigo-50 border-l-4 border-indigo-400 p-3 sm:p-4 mb-4 sm:mb-6">
+              <h4 className="text-base sm:text-lg font-semibold text-indigo-800 mb-2">PREPARE BEFORE YOU BEGIN</h4>
+              <p className="text-xs sm:text-sm text-indigo-800 mb-2">
                 As part of the event registration process, you will need the following information. We recommend you have this information available prior to commencement.
               </p>
-              <ul className="text-sm text-indigo-800 list-disc list-inside space-y-1">
+              <ul className="text-xs sm:text-sm text-indigo-800 list-disc list-inside space-y-1">
                 <li>Passport details</li>
                 <li>Medications you currently take</li>
                 <li>Personal health and next of kin details</li>
@@ -881,9 +894,9 @@ const NZSIRegistrationForm = () => {
       case 2:
         return (
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Personal Details</h3>
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Personal Details</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
                 <input
@@ -917,7 +930,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -944,7 +957,7 @@ const NZSIRegistrationForm = () => {
               {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
                 <input
@@ -1006,7 +1019,7 @@ const NZSIRegistrationForm = () => {
               {errors.occupation && <p className="text-red-500 text-sm mt-1">{errors.occupation}</p>}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Mobile Number *</label>
                 <input
@@ -1060,7 +1073,7 @@ const NZSIRegistrationForm = () => {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">City *</label>
                 <input
@@ -1092,7 +1105,7 @@ const NZSIRegistrationForm = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Country *</label>
                 <select
@@ -1195,7 +1208,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Does your phone have built-in GPS? *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -1223,7 +1236,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Do you have a Facebook account? *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -1258,7 +1271,7 @@ const NZSIRegistrationForm = () => {
             
             <div>
               <h4 className="text-lg font-semibold text-gray-800 mb-4">Next of Kin / Emergency Contact 1</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
                   <input
@@ -1349,7 +1362,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <h4 className="text-lg font-semibold text-gray-800 mb-4">Next of Kin / Emergency Contact 2</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
                   <input
@@ -1453,7 +1466,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Do you suffer a medical condition we need to know about? *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -1483,7 +1496,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Do you have any allergies to medication? *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -1512,7 +1525,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Do you have any food or other allergies? *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -1541,7 +1554,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Do you have a health fund? *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -1568,7 +1581,7 @@ const NZSIRegistrationForm = () => {
               {errors.hasHealthFund && <p className="text-red-500 text-sm mt-1">{errors.hasHealthFund}</p>}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Medicare Number *</label>
                 <input
@@ -1613,7 +1626,7 @@ const NZSIRegistrationForm = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Have you ever attended a professional off road motorcycle training course? *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -1644,7 +1657,7 @@ const NZSIRegistrationForm = () => {
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">If yes, was your training course completed in the last 6 months? *</label>
-                  <div className="flex space-x-4">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <label className="flex items-center">
                       <input
                         type="radio"
@@ -1699,7 +1712,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Overall, how would you personally rate your off road riding experience. *</label>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 <label className="flex items-center p-4 border border-gray-300 rounded-lg hover:bg-green-50 cursor-pointer">
                   <input
                     type="radio"
@@ -1764,7 +1777,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">I would like to: *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -1776,6 +1789,17 @@ const NZSIRegistrationForm = () => {
                   />
                   Hire a Motorcycle
                 </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="hireOption"
+                    value="Use my own motorcycle"
+                    checked={formData.hireOption === 'Use my own motorcycle'}
+                    onChange={handleInputChange}
+                    className="mr-2"
+                  />
+                  Use my own motorcycle
+                </label>
               </div>
               {errors.hireOption && <p className="text-red-500 text-sm mt-1">{errors.hireOption}</p>}
             </div>
@@ -1784,7 +1808,7 @@ const NZSIRegistrationForm = () => {
               <label className="block text-sm font-medium text-gray-700 mb-4">Choose which motorbike you wish to hire. (Required)</label>
               
               {/* Grid layout for motorcycles - 6 per row */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4">
                 {motorcycles.map((bike, index) => (
                   <label
                     key={index}
@@ -1796,7 +1820,7 @@ const NZSIRegistrationForm = () => {
                       formData.selectedMotorcycle === bike.name
                         ? 'ring-2 ring-blue-500 shadow-lg'
                         : ''
-                    }`}
+                    } border border-gray-300 rounded-lg p-3 sm:p-4`}
                   >
                     <input
                       type="radio"
@@ -1808,7 +1832,7 @@ const NZSIRegistrationForm = () => {
                       className="sr-only"
                     />
                     
-                    <div className={`bg-white rounded-lg border-2 p-4 text-center transition-all duration-200 ${
+                    <div className={`bg-white rounded-lg border-2 p-3 sm:p-4 text-center transition-all duration-200 ${
                       formData.selectedMotorcycle === bike.name
                         ? 'border-blue-500 bg-blue-50'
                         : 'border-gray-200 hover:border-gray-300'
@@ -1820,13 +1844,13 @@ const NZSIRegistrationForm = () => {
                           <img
                             src={bike.image}
                             alt={bike.name}
-                            className="w-full h-32 object-cover rounded-md mx-auto"
+                            className="w-full h-24 sm:h-32 object-cover rounded-md mx-auto"
                             onError={(e) => {
                               e.target.style.display = 'none';
                             }}
                           />
                         ) : (
-                          <div className="w-full h-32 bg-gray-200 rounded-md flex items-center justify-center">
+                          <div className="w-full h-24 sm:h-32 bg-gray-200 rounded-md flex items-center justify-center">
                             <span className="text-gray-400 text-sm">No Image</span>
                           </div>
                         )}
@@ -1836,14 +1860,14 @@ const NZSIRegistrationForm = () => {
                       <div className="space-y-1">
                         {!bike.available ? (
                           <div className="text-center">
-                            <div className="text-red-500 font-semibold text-sm mb-1">SOLD OUT</div>
+                            <div className="text-red-500 font-semibold text-xs sm:text-sm mb-1">SOLD OUT</div>
                             <div className="text-gray-500 text-xs">{bike.name}</div>
                           </div>
                         ) : (
                           <div className="text-center">
                             <div className="text-gray-500 text-xs mb-1">({bike.remaining} remaining)</div>
-                            <div className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">{bike.name}</div>
-                            <div className="text-blue-600 font-bold text-sm">${bike.price}/day</div>
+                            <div className="font-semibold text-gray-900 text-xs sm:text-sm mb-1 line-clamp-2">{bike.name}</div>
+                            <div className="text-blue-600 font-bold text-xs sm:text-sm">${bike.price}/day</div>
                           </div>
                         )}
                       </div>
@@ -1877,47 +1901,47 @@ const NZSIRegistrationForm = () => {
                 
                 {/* Bike Specifications */}
                 {getSelectedBikeSpecs() && (
-                  <div className="mt-6 bg-gray-50 rounded-lg p-6">
-                    <h5 className="text-lg font-semibold text-gray-800 mb-4 text-center">Specifications</h5>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="mt-4 sm:mt-6 bg-gray-50 rounded-lg p-4 sm:p-6">
+                    <h5 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4 text-center">Specifications</h5>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <span className="text-sm font-medium text-gray-600">Mileage:</span>
-                          <span className="text-sm text-gray-800">{getSelectedBikeSpecs().mileage}</span>
+                          <span className="text-xs sm:text-sm font-medium text-gray-600">Mileage:</span>
+                          <span className="text-xs sm:text-sm text-gray-800">{getSelectedBikeSpecs().mileage}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm font-medium text-gray-600">Displacement:</span>
-                          <span className="text-sm text-gray-800">{getSelectedBikeSpecs().displacement}</span>
+                          <span className="text-xs sm:text-sm font-medium text-gray-600">Displacement:</span>
+                          <span className="text-xs sm:text-sm text-gray-800">{getSelectedBikeSpecs().displacement}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm font-medium text-gray-600">Cylinders:</span>
-                          <span className="text-sm text-gray-800">{getSelectedBikeSpecs().cylinders}</span>
+                          <span className="text-xs sm:text-sm font-medium text-gray-600">Cylinders:</span>
+                          <span className="text-xs sm:text-sm text-gray-800">{getSelectedBikeSpecs().cylinders}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm font-medium text-gray-600">Max Power:</span>
-                          <span className="text-sm text-gray-800">{getSelectedBikeSpecs().maxPower}</span>
+                          <span className="text-xs sm:text-sm font-medium text-gray-600">Max Power:</span>
+                          <span className="text-xs sm:text-sm text-gray-800">{getSelectedBikeSpecs().maxPower}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm font-medium text-gray-600">Max Torque:</span>
-                          <span className="text-sm text-gray-800">{getSelectedBikeSpecs().maxTorque}</span>
+                          <span className="text-xs sm:text-sm font-medium text-gray-600">Max Torque:</span>
+                          <span className="text-xs sm:text-sm text-gray-800">{getSelectedBikeSpecs().maxTorque}</span>
                         </div>
                       </div>
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <span className="text-sm font-medium text-gray-600">Front Brake:</span>
-                          <span className="text-sm text-gray-800">{getSelectedBikeSpecs().frontBrake}</span>
+                          <span className="text-xs sm:text-sm font-medium text-gray-600">Front Brake:</span>
+                          <span className="text-xs sm:text-sm text-gray-800">{getSelectedBikeSpecs().frontBrake}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm font-medium text-gray-600">Rear Brake:</span>
-                          <span className="text-sm text-gray-800">{getSelectedBikeSpecs().rearBrake}</span>
+                          <span className="text-xs sm:text-sm font-medium text-gray-600">Rear Brake:</span>
+                          <span className="text-xs sm:text-sm text-gray-800">{getSelectedBikeSpecs().rearBrake}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm font-medium text-gray-600">Fuel Capacity:</span>
-                          <span className="text-sm text-gray-800">{getSelectedBikeSpecs().fuelCapacity}</span>
+                          <span className="text-xs sm:text-sm font-medium text-gray-600">Fuel Capacity:</span>
+                          <span className="text-xs sm:text-sm text-gray-800">{getSelectedBikeSpecs().fuelCapacity}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm font-medium text-gray-600">Body Type:</span>
-                          <span className="text-sm text-gray-800">{getSelectedBikeSpecs().bodyType}</span>
+                          <span className="text-xs sm:text-sm font-medium text-gray-600">Body Type:</span>
+                          <span className="text-xs sm:text-sm text-gray-800">{getSelectedBikeSpecs().bodyType}</span>
                         </div>
                       </div>
                     </div>
@@ -1964,7 +1988,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Is your licence currently valid? *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -2379,7 +2403,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Do you have a phone mount on your motorcycle that allows you to see your phone while riding? *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -2408,7 +2432,7 @@ const NZSIRegistrationForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Do you have the capacity to charge your phone while riding? *</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -2579,7 +2603,7 @@ const NZSIRegistrationForm = () => {
                 <div className="mb-4">
                   <h4 className="text-lg font-semibold text-gray-800 mb-2">PARTNER</h4>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Would you like to register a partner to travel with you? *</label>
-                  <div className="flex space-x-4">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <label className="flex items-center">
                       <input
                         type="radio"
@@ -2675,7 +2699,7 @@ const NZSIRegistrationForm = () => {
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
-                          <div className="flex space-x-4">
+                          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                             <label className="flex items-center">
                               <input
                                 type="radio"
@@ -2758,7 +2782,7 @@ const NZSIRegistrationForm = () => {
                           />
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">City *</label>
                             <input
@@ -2827,7 +2851,7 @@ const NZSIRegistrationForm = () => {
                           <div className="space-y-4">
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-2">Do you suffer a medical condition we need to know about? *</label>
-                              <div className="flex space-x-4">
+                              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                 <label className="flex items-center">
                                   <input
                                     type="radio"
@@ -2890,7 +2914,7 @@ const NZSIRegistrationForm = () => {
 
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-2">Do you take any regular medication? *</label>
-                              <div className="flex space-x-4">
+                              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                 <label className="flex items-center">
                                   <input
                                     type="radio"
@@ -2936,7 +2960,7 @@ const NZSIRegistrationForm = () => {
 
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-2">Do you have any allergies to medication? *</label>
-                              <div className="flex space-x-4">
+                              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                 <label className="flex items-center">
                                   <input
                                     type="radio"
@@ -2982,7 +3006,7 @@ const NZSIRegistrationForm = () => {
 
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-2">Do you have any food or other allergies? *</label>
-                              <div className="flex space-x-4">
+                              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                 <label className="flex items-center">
                                   <input
                                     type="radio"
@@ -3046,7 +3070,7 @@ const NZSIRegistrationForm = () => {
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Are you planning to ride this event with a mate or several friends? i.e a group *</label>
-                <div className="flex space-x-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <label className="flex items-center">
                     <input
                       type="radio"
@@ -3651,19 +3675,19 @@ const NZSIRegistrationForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-red-100 py-8">
-      <div className="container mx-auto px-6">
+    <div className="min-h-screen bg-red-100 py-4 sm:py-8">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Registration Form NZ South Island 2025</h1>
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 px-2">Registration Form NZ South Island 2025</h1>
           </div>
 
           {/* Progress Bar */}
-          <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-medium text-gray-700">Step {currentStep} of 12</span>
-                  <span className="text-sm font-medium text-gray-700">{Math.round((currentStep / 12) * 100)}%</span>
+          <div className="mb-6 sm:mb-8">
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <span className="text-xs sm:text-sm font-medium text-gray-700">Step {currentStep} of 12</span>
+                  <span className="text-xs sm:text-sm font-medium text-gray-700">{Math.round((currentStep / 12) * 100)}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 
@@ -3674,35 +3698,35 @@ const NZSIRegistrationForm = () => {
           </div>
 
           {/* Step Navigation */}
-          <div className="flex justify-between mb-8">
+          <div className="flex justify-between mb-6 sm:mb-8 overflow-x-auto pb-2">
             {steps.map((step) => (
               <div
                 key={step.number}
-                className={`flex flex-col items-center ${
+                className={`flex flex-col items-center flex-shrink-0 ${
                   currentStep >= step.number ? 'text-green-600' : 'text-gray-400'
                 }`}
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold ${
                   currentStep >= step.number ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'
                 }`}>
                   {step.number}
                 </div>
-                <span className="text-xs mt-1 text-center">{step.title}</span>
+                <span className="text-xs mt-1 text-center max-w-16 sm:max-w-none">{step.title}</span>
               </div>
             ))}
           </div>
 
           {/* Form Content */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8">
             {renderStepContent()}
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex justify-between mt-8">
+          <div className="flex flex-col sm:flex-row justify-between gap-4 mt-6 sm:mt-8">
             <button
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`px-6 py-3 rounded-lg font-medium ${
+              className={`px-4 sm:px-6 py-3 rounded-lg font-medium text-sm sm:text-base ${
                 currentStep === 1
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   : 'bg-gray-500 text-white hover:bg-gray-600'
@@ -3714,7 +3738,7 @@ const NZSIRegistrationForm = () => {
                 <button
                   type="button"
                   onClick={currentStep === 12 ? handleSubmit : nextStep}
-                  className={`px-6 py-3 rounded-lg font-medium ${
+                  className={`px-4 sm:px-6 py-3 rounded-lg font-medium text-sm sm:text-base ${
                     currentStep === 12
                       ? 'bg-green-600 text-white hover:bg-green-700'
                       : 'bg-green-500 text-white hover:bg-green-600'

@@ -122,9 +122,12 @@ import UserDashboard from './pages/dashboard/UserDashboard';
 import AdminDashboard from './pages/dashboard/AdminDashboard';
 import MDPPhase2RegistrationPage from './components/bookingforms/MDPPhase2RegistrationPage';
 import MDPPhase3RegistrationPage from './components/bookingforms/MDPPhase3RegistrationPage';
-import NZSIRegistrationForm from './components/nzsi/NZSIRegistrationForm';
+// import NZSIRegistrationForm from './components/nzsi/NZSIRegistrationForm';
 import { AuthContext, AuthProvider } from "../src/components/AuthContext"
 import ProtectedRoute from '../src/components/ProtectedRoute';
+import NZSIRegistrationFormRefactored from './components/bookingforms/nzsi/NZSIRegistrationFormRefactored';
+import SuccessPage from './pages/SuccessPage';
+import CancelPage from './pages/CancelPage';
 
 
 
@@ -147,7 +150,9 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/motorcycle-adventures" element={<MotorcycleAdventure />} />
-         <Route path="/adventures/nzsi-2025/registration" element={<NZSIRegistrationForm />} />
+         {/* <Route path="/adventures/nzsi-2025/registration" element={<NZSIRegistrationForm />} /> */}
+         <Route path="/adventures/nzsi-2025/registration" element={<ProtectedRoute element={<NZSIRegistrationFormRefactored />} requiredRole="user" />}
+         />
         <Route
           path="/motorcycle-adventures-onroad"
           element={<MotorcycleAdventureOnroad />}
@@ -208,7 +213,19 @@ const AppContent = () => {
           path="/admin/dashboard"
           element={<ProtectedRoute element={<AdminDashboard />} requiredRole="admin" />}
         />
+          <Route
+          path="/success"
+          element={<SuccessPage />}
+        />
+      <Route
+          path="/cancel"
+          element={<CancelPage />}
+        />
+        
       </Routes>
+
+    
+
       <Footer />
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </div>
