@@ -2,6 +2,53 @@ import React from 'react';
 import { Calendar, MapPin, Clock, ExternalLink } from 'lucide-react';
 
 const CourseDates = () => {
+  // Get current date
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize to start of day for comparison
+
+  // Define course data with specific dates
+  const courses = [
+    { month: 'JANUARY', dates: null, phase: null, status: 'SOLD OUT' },
+    { month: 'FEBRUARY', dates: null, phase: null, status: 'SOLD OUT' },
+    { month: 'MAR. 28,29,30', dates: new Date(2025, 2, 28), phase: 'MDP Phase I', status: 'SOLD OUT' },
+    { month: 'APR. 25,26,27', dates: new Date(2025, 3, 25), phase: 'MDP Phase II', status: 'SOLD OUT' },
+    { month: 'MAY 23,24,25', dates: new Date(2025, 4, 23), phase: 'MDP Phase I', status: 'SOLD OUT' },
+    { month: 'JUNE 27,28,29', dates: new Date(2025, 5, 27), phase: 'MDP Phase II', status: 'SOLD OUT' },
+    { month: 'JULY', dates: null, phase: null, status: 'SOLD OUT' },
+    { month: 'AUGUST', dates: null, phase: null, status: 'SOLD OUT' },
+    { month: 'SEPT. 26,27,28', dates: new Date(2025, 8, 26), phase: 'MDP Phase I', status: 'SOLD OUT' },
+    {
+      month: 'OCT. 24,25,26',
+      dates: new Date(2025, 9, 24),
+      phase: 'MDP Phase II',
+      status: null, // Will be determined dynamically
+      registrationLink: '/registration-mdp-phase-2',
+    },
+    {
+      month: 'NOV. 28,29,30',
+      dates: new Date(2025, 10, 28),
+      phase: 'MDP Phase III',
+      status: null, // Will be determined dynamically
+      registrationLink: '/registration-mdp-phase-3',
+    },
+    { month: 'DECEMBER', dates: null, phase: null, status: 'SOLD OUT' },
+  ];
+
+  // Function to determine if a course is sold out based on date
+  const isCourseSoldOut = (courseDate) => {
+    if (!courseDate) return true; // No date means sold out (e.g., January, July)
+    // Consider a course sold out if it's in the past or too close (e.g., within 7 days)
+    const thresholdDate = new Date(today);
+    thresholdDate.setDate(today.getDate() + 7); // 7-day threshold
+    return courseDate < thresholdDate;
+  };
+
+  // Calculate summary stats
+  const availableCourses = courses.filter(
+    (course) => course.status === null && !isCourseSoldOut(course.dates)
+  ).length;
+  const soldOutCourses = courses.length - availableCourses;
+
   return (
     <section id="course-dates" className="py-24 bg-gradient-to-br from-gray-50 via-white to-yellow-50 relative overflow-hidden">
       {/* Background decorative elements */}
@@ -11,7 +58,7 @@ const CourseDates = () => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-red-400 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 relative z-10" id='calender'>
         {/* Header Section */}
         <div className="text-center mb-16">
           <div className="inline-block mb-6">
@@ -69,273 +116,58 @@ const CourseDates = () => {
 
               {/* Table Body */}
               <tbody className="divide-y divide-gray-100">
-                {/* January - SOLD OUT */}
-                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-red-600">JANUARY</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8 text-red-600">NO COURSE AVAILABLE</td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
-                      SOLD OUT
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
+                {courses.map((course, index) => {
+                  const isSoldOut = course.status === 'SOLD OUT' || isCourseSoldOut(course.dates);
+                  const statusText = isSoldOut ? 'SOLD OUT' : 'AVAILABLE';
+                  const statusColor = isSoldOut ? 'red' : 'green';
+                  const phaseText = course.phase || 'NO COURSE AVAILABLE';
+                  const actionContent = isSoldOut ? (
                     <span className="text-red-400 text-sm">-</span>
-                  </td>
-                </tr>
-
-                {/* February - SOLD OUT */}
-                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-red-600">FEBRUARY</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8 text-red-600">NO COURSE AVAILABLE</td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
-                      SOLD OUT
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="text-red-400 text-sm">-</span>
-                  </td>
-                </tr>
-
-                {/* March - SOLD OUT */}
-                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-red-600">MAR. 28,29,30</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
-                      MDP Phase I
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
-                      SOLD OUT
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="text-red-400 text-sm">-</span>
-                  </td>
-                </tr>
-
-                {/* April - SOLD OUT */}
-                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-red-600">APR. 25,26,27</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
-                      MDP Phase II
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
-                      SOLD OUT
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="text-red-400 text-sm">-</span>
-                  </td>
-                </tr>
-
-                {/* May - SOLD OUT */}
-                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-red-600">MAY 23,24,25</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
-                      MDP Phase I
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
-                      SOLD OUT
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="text-red-400 text-sm">-</span>
-                  </td>
-                </tr>
-
-                {/* June - SOLD OUT */}
-                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-red-600">JUNE 27,28,29</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
-                      MDP Phase II
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
-                      SOLD OUT
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="text-red-400 text-sm">-</span>
-                  </td>
-                </tr>
-
-                {/* July - SOLD OUT */}
-                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-red-600">JULY</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8 text-red-600">NO COURSE AVAILABLE</td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
-                      SOLD OUT
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="text-red-400 text-sm">-</span>
-                  </td>
-                </tr>
-
-                {/* August - SOLD OUT */}
-                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-red-600">AUGUST</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8 text-red-600">NO COURSE AVAILABLE</td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
-                      SOLD OUT
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="text-red-400 text-sm">-</span>
-                  </td>
-                </tr>
-
-                {/* September - SOLD OUT */}
-                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-red-600">SEPT. 26,27,28</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 border border-red-200">
-                      MDP Phase I
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
-                      SOLD OUT
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="text-red-400 text-sm">-</span>
-                  </td>
-                </tr>
-
-                {/* October - AVAILABLE */}
-                <tr className="hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-green-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-green-600">OCT. 24,25,26</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
-                      MDP Phase II
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-green-100 text-green-800 border border-green-200">
-                      AVAILABLE
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <a 
-                      href="/registration-mdp-phase-2" 
+                  ) : (
+                    <a
+                      href={course.registrationLink}
                       className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold rounded-lg text-sm transition-all duration-300 transform hover:scale-105 shadow-lg"
                     >
                       BOOK NOW
                       <ExternalLink className="w-4 h-4 ml-2" />
                     </a>
-                  </td>
-                </tr>
+                  );
 
-                {/* November - AVAILABLE */}
-                <tr className="hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-green-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-green-600">NOV. 28,29,30</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
-                      MDP Phase III
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-green-100 text-green-800 border border-green-200">
-                      AVAILABLE
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <a 
-                      href="/registration-mdp-phase-3" 
-                      className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold rounded-lg text-sm transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  return (
+                    <tr
+                      key={index}
+                      className={`hover:bg-gradient-to-r hover:from-${statusColor}-50 hover:to-${
+                        statusColor === 'red' ? 'pink' : 'emerald'
+                      }-50 transition-all duration-300`}
                     >
-                      BOOK NOW
-                      <ExternalLink className="w-4 h-4 ml-2" />
-                    </a>
-                  </td>
-                </tr>
-
-                {/* December - SOLD OUT */}
-                <tr className="hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-300">
-                  <td className="py-6 px-8">
-                    <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-500 rounded-full mr-4"></div>
-                      <span className="text-lg font-semibold text-red-600">DECEMBER</span>
-                    </div>
-                  </td>
-                  <td className="py-6 px-8 text-red-600">NO COURSE AVAILABLE</td>
-                  <td className="py-6 px-8">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 border border-red-200">
-                      SOLD OUT
-                    </span>
-                  </td>
-                  <td className="py-6 px-8">
-                    <span className="text-red-400 text-sm">-</span>
-                  </td>
-                </tr>
+                      <td className="py-6 px-8">
+                        <div className="flex items-center">
+                          <div className={`w-3 h-3 bg-${statusColor}-500 rounded-full mr-4`}></div>
+                          <span className={`text-lg font-semibold text-${statusColor}-600`}>{course.month}</span>
+                        </div>
+                      </td>
+                      <td className="py-6 px-8">
+                        {course.phase ? (
+                          <span
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-${statusColor}-100 text-${statusColor}-800 border border-${statusColor}-200`}
+                          >
+                            {phaseText}
+                          </span>
+                        ) : (
+                          <span className={`text-${statusColor}-600`}>{phaseText}</span>
+                        )}
+                      </td>
+                      <td className="py-6 px-8">
+                        <span
+                          className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-${statusColor}-100 text-${statusColor}-800 border border-${statusColor}-200`}
+                        >
+                          {statusText}
+                        </span>
+                      </td>
+                      <td className="py-6 px-8">{actionContent}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -345,7 +177,7 @@ const CourseDates = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 animate-fade-in-up animation-delay-1000">
           <div className="bg-gradient-to-br from-red-500/10 to-pink-500/10 backdrop-blur-sm border border-red-200 rounded-2xl p-6 text-center">
             <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-lg">9</span>
+              <span className="text-white font-bold text-lg">{soldOutCourses}</span>
             </div>
             <h3 className="text-lg font-bold text-red-800 mb-2">SOLD OUT</h3>
             <p className="text-red-600 text-sm">Months fully booked</p>
@@ -361,7 +193,7 @@ const CourseDates = () => {
 
           <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-sm border border-green-200 rounded-2xl p-6 text-center">
             <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-lg">2</span>
+              <span className="text-white font-bold text-lg">{availableCourses}</span>
             </div>
             <h3 className="text-lg font-bold text-green-800 mb-2">AVAILABLE</h3>
             <p className="text-green-600 text-sm">Book your spot now</p>

@@ -34,12 +34,15 @@ const OffRoadHero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="#calender">
             <button className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-8 rounded-lg text-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">
               VIEW PROGRAMS
             </button>
+            </a>
+            {/* <a href="/contact"></a>
             <button className="border-2 border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black font-bold py-4 px-8 rounded-lg text-lg backdrop-blur-sm transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">
               CONTACT US
-            </button>
+            </button> */}
           </div>
         </div>
 

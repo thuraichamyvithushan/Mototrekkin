@@ -138,10 +138,12 @@ const ProgramInformation = () => {
               We look forward to welcoming you to the MDP soon. Complete your details below to obtain a comprehensive information kit which contains dates, states, venues, inclusions and investment in the program.
             </p>
 
+            <a href="#contactforinfo">
             <button className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold py-4 px-8 rounded-lg text-lg shadow-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center">
               <ArrowRight className="w-5 h-5 mr-2" />
               REQUEST INFORMATION KIT
             </button>
+            </a>
           </div>
         </div>
       </div>

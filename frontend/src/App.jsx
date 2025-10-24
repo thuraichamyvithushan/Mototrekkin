@@ -115,7 +115,7 @@ import HearingProtection from './pages/HearingProtection';
 import EarMoldBooking from './pages/EarMoldBooking';
 import TrainingPage from './pages/TrainingPage';
 import OffRoadTrainingDetailPage from './pages/OffRoadTrainingDetailPage';
-import RegistrationPage from './pages/RegistrationPage';
+
 import ServicesPage from './pages/Services';
 import ServiceBookingForm from './components/serviceBookingForm';
 import UserDashboard from './pages/dashboard/UserDashboard';
@@ -128,6 +128,8 @@ import ProtectedRoute from '../src/components/ProtectedRoute';
 import NZSIRegistrationFormRefactored from './components/bookingforms/nzsi/NZSIRegistrationFormRefactored';
 import SuccessPage from './pages/SuccessPage';
 import CancelPage from './pages/CancelPage';
+import RegistrationPage from './components/bookingforms/RegistrationPage';
+import MDPPhase2Registration from './components/bookingforms/MDPphase2/MDPPhase2Registration';
 
 
 
@@ -197,14 +199,18 @@ const AppContent = () => {
           path="/service-booking-form"
           element={<ProtectedRoute element={<ServiceBookingForm />} requiredRole="user" />}
         />
-        <Route
+        {/* <Route
           path="/registration-mdp-phase-2"
           element={<MDPPhase2RegistrationPage />}
-        />
+        /> */}
         <Route
           path="/registration-mdp-phase-3"
-          element={<MDPPhase3RegistrationPage />}
+          element={<MDPPhase2Registration />}
         />
+        {/* <Route
+          path="/registration-mdp-phase-3"
+          element={<MDPPhase3RegistrationPage />}
+        /> */}
         <Route
           path="/userdashboard"
           element={<ProtectedRoute element={<UserDashboard />} requiredRole="user" />}

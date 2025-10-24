@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from '../../../axiosConfig';
 import { loadStripe } from '@stripe/stripe-js';
+import { format } from 'date-fns';
 import Step1 from './steps/Step1';
 import Step2 from './steps/Step2';
 import Step3 from './steps/Step3';
@@ -13,17 +14,20 @@ import Step9 from './steps/Step9';
 import Step10 from './steps/Step10';
 import Step11 from './steps/Step11';
 import Step12 from './steps/Step12';
-import { motorcycles } from './motorcycles';
-import { format } from 'date-fns';
+import { fetchMotorcycles } from './motorcycles';
 
 const stripePromise = loadStripe('pk_test_51Q5xX9FSb9wGlBwSQN4WE9bFcWqUxWeJ8EmyimzBG77QPTPEhvd62fXTxkr1qipe5Z4OZAlWZyw3otmiQRTPZiIA008HheOzhj');
 
 const NZSIRegistrationFormRefactored = () => {
   console.log('NZSIRegistrationFormRefactored: Component loaded');
+  
   const [currentStep, setCurrentStep] = useState(1);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
+  const [bikes, setBikes] = useState([]);
+  const [bikesLoading, setBikesLoading] = useState(true);
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -76,21 +80,25 @@ const NZSIRegistrationFormRefactored = () => {
     offRoadExperience: '',
     experienceLevel: '',
     confidenceAreas: '',
-    hireOption: '',
-    selectedMotorcycle: '',
-    ownBikeMake: '',
-    ownBikeModel: '',
-    ownBikeYear: '',
-    ownBikeRegistrationNumber: '',
-    ownBikeStateOrRegion: '',
-    ownBikeOdometer: '',
-    ownBikeServiceUpToDate: '',
-    ownBikeServiceIntention: '',
-    ownBikeHasUnresolvedIssues: '',
-    ownBikeIssuesDetails: '',
-    ownBikeHasComprehensiveInsurance: '',
-    ownBikeFuelCapacity: '',
-    ownBikeEstimatedRange: '',
+    motorcycle: {
+      hireOption: '',
+      selectedMotorcycle: '',
+      ownBike: {
+        make: '',
+        model: '',
+        year: '',
+        registrationNumber: '',
+        stateOrRegion: '',
+        odometer: '',
+        serviceUpToDate: '',
+        serviceIntention: '',
+        hasUnresolvedIssues: '',
+        issuesDetails: '',
+        hasComprehensiveInsurance: '',
+        fuelCapacity: '',
+        estimatedRange: ''
+      }
+    },
     licenceValid: '',
     licenceNumber: '',
     licenceExpiryDate: null,
@@ -110,8 +118,27 @@ const NZSIRegistrationFormRefactored = () => {
     giftVoucherCode: '',
     agreeToTerms: false,
     termsAgreement: '',
-    paymentOption: '',
+    payment: {
+      paymentOption: ''
+    }
   });
+
+  useEffect(() => {
+    const fetchBikes = async () => {
+      try {
+        console.log('NZSIRegistrationFormRefactored: Fetching bikes');
+        const bikeData = await fetchMotorcycles();
+        setBikes(bikeData);
+        console.log('NZSIRegistrationFormRefactored: Bikes fetched', bikeData.length);
+      } catch (err) {
+        console.error('NZSIRegistrationFormRefactored: Fetch bikes error', err.message);
+        setApiError('Failed to load motorcycles. Please try again.');
+      } finally {
+        setBikesLoading(false);
+      }
+    };
+    fetchBikes();
+  }, []);
 
   const steps = [
     { number: 1, title: 'Introduction', completed: currentStep > 1 },
@@ -125,21 +152,34 @@ const NZSIRegistrationFormRefactored = () => {
     { number: 9, title: 'Accommodation', completed: currentStep > 9 },
     { number: 10, title: 'Group', completed: currentStep > 10 },
     { number: 11, title: 'Terms', completed: currentStep > 11 },
-    { number: 12, title: 'Payment', completed: currentStep > 12 },
+    { number: 12, title: 'Payment', completed: currentStep > 12 }
   ];
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e, section = null) => {
     const { name, value, type, checked, files } = e.target;
-    console.log(`handleInputChange: ${name} changed to ${type === 'file' ? files[0]?.name : value || checked}`);
+    console.log(`handleInputChange: ${name} changed to ${type === 'file' ? files[0]?.name : value || checked}`, { section });
+    
     if (type === 'checkbox' && ['hydration', 'electronicEquipment', 'upperProtective', 'lowerProtective', 'mechanicalRelated'].includes(name)) {
       setFormData((prev) => ({
         ...prev,
-        [name]: checked ? [...prev[name], value] : prev[name].filter((item) => item !== value),
+        [name]: checked ? [...prev[name], value] : prev[name].filter((item) => item !== value)
       }));
     } else if (type === 'checkbox') {
       setFormData((prev) => ({ ...prev, [name]: checked }));
     } else if (type === 'file') {
       setFormData((prev) => ({ ...prev, [name]: files[0] }));
+    } else if (section) {
+      setFormData((prev) => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [name]: value
+        }
+      }));
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -195,26 +235,32 @@ const NZSIRegistrationFormRefactored = () => {
         if (!formData.experienceLevel) newErrors.experienceLevel = 'Experience level is required';
         break;
       case 6:
-        if (!formData.hireOption) newErrors.hireOption = 'Hire option is required';
-        if (formData.hireOption === 'Hire a Motorcycle') {
-          if (!formData.selectedMotorcycle) newErrors.selectedMotorcycle = 'Motorcycle selection is required';
-        } else if (formData.hireOption === 'Use my own motorcycle') {
-          if (!formData.ownBikeMake.trim()) newErrors.ownBikeMake = 'Bike make is required';
-          if (!formData.ownBikeModel.trim()) newErrors.ownBikeModel = 'Bike model is required';
-          if (!formData.ownBikeYear) newErrors.ownBikeYear = 'Bike year is required';
-          if (!formData.ownBikeRegistrationNumber.trim()) newErrors.ownBikeRegistrationNumber = 'Registration number is required';
-          if (!formData.ownBikeStateOrRegion.trim()) newErrors.ownBikeStateOrRegion = 'State/Region is required';
-          if (!formData.ownBikeOdometer) newErrors.ownBikeOdometer = 'Odometer reading is required';
-          if (!formData.ownBikeServiceUpToDate) newErrors.ownBikeServiceUpToDate = 'Service schedule question is required';
-          if (formData.ownBikeServiceUpToDate === 'No' && !formData.ownBikeServiceIntention)
+        if (!formData.motorcycle.hireOption) newErrors.hireOption = 'Hire option is required';
+        if (formData.motorcycle.hireOption === 'Hire a Motorcycle') {
+          if (!formData.motorcycle.selectedMotorcycle) newErrors.selectedMotorcycle = 'Motorcycle selection is required';
+          else {
+            const selectedBike = bikes.find(bike => bike.name === formData.motorcycle.selectedMotorcycle);
+            if (!selectedBike || !selectedBike.available || selectedBike.remaining <= 0) {
+              newErrors.selectedMotorcycle = 'Selected motorcycle is not available or out of stock';
+            }
+          }
+        } else if (formData.motorcycle.hireOption === 'Use my own motorcycle') {
+          if (!formData.motorcycle.ownBike.make.trim()) newErrors.ownBikeMake = 'Bike make is required';
+          if (!formData.motorcycle.ownBike.model.trim()) newErrors.ownBikeModel = 'Bike model is required';
+          if (!formData.motorcycle.ownBike.year) newErrors.ownBikeYear = 'Bike year is required';
+          if (!formData.motorcycle.ownBike.registrationNumber.trim()) newErrors.ownBikeRegistrationNumber = 'Registration number is required';
+          if (!formData.motorcycle.ownBike.stateOrRegion.trim()) newErrors.ownBikeStateOrRegion = 'State/Region is required';
+          if (!formData.motorcycle.ownBike.odometer) newErrors.ownBikeOdometer = 'Odometer reading is required';
+          if (!formData.motorcycle.ownBike.serviceUpToDate) newErrors.ownBikeServiceUpToDate = 'Service schedule question is required';
+          if (formData.motorcycle.ownBike.serviceUpToDate === 'No' && !formData.motorcycle.ownBike.serviceIntention)
             newErrors.ownBikeServiceIntention = 'Please confirm your intention to service the bike';
-          if (!formData.ownBikeHasUnresolvedIssues) newErrors.ownBikeHasUnresolvedIssues = 'Unresolved issues question is required';
-          if (formData.ownBikeHasUnresolvedIssues === 'Yes' && !formData.ownBikeIssuesDetails.trim())
+          if (!formData.motorcycle.ownBike.hasUnresolvedIssues) newErrors.ownBikeHasUnresolvedIssues = 'Unresolved issues question is required';
+          if (formData.motorcycle.ownBike.hasUnresolvedIssues === 'Yes' && !formData.motorcycle.ownBike.issuesDetails.trim())
             newErrors.ownBikeIssuesDetails = 'Please explain the mechanical issues';
-          if (!formData.ownBikeHasComprehensiveInsurance)
+          if (!formData.motorcycle.ownBike.hasComprehensiveInsurance)
             newErrors.ownBikeHasComprehensiveInsurance = 'Insurance question is required';
-          if (!formData.ownBikeFuelCapacity) newErrors.ownBikeFuelCapacity = 'Fuel capacity is required';
-          if (!formData.ownBikeEstimatedRange) newErrors.ownBikeEstimatedRange = 'Estimated full fuel range is required';
+          if (!formData.motorcycle.ownBike.fuelCapacity) newErrors.ownBikeFuelCapacity = 'Fuel capacity is required';
+          if (!formData.motorcycle.ownBike.estimatedRange) newErrors.ownBikeEstimatedRange = 'Estimated full fuel range is required';
         }
         break;
       case 7:
@@ -248,7 +294,7 @@ const NZSIRegistrationFormRefactored = () => {
         if (!formData.termsAgreement.trim()) newErrors.termsAgreement = 'Terms agreement text is required';
         break;
       case 12:
-        if (!formData.paymentOption) newErrors.paymentOption = 'Payment option is required';
+        if (!formData.payment?.paymentOption) newErrors.paymentOption = 'Payment option is required';
         break;
       default:
         break;
@@ -259,409 +305,405 @@ const NZSIRegistrationFormRefactored = () => {
   };
 
   const calculateTotalPayment = () => {
-    const selectedBike = motorcycles.find(bike => bike.name === formData.selectedMotorcycle);
-    const bikeHire = selectedBike && formData.hireOption === 'Hire a Motorcycle' ? selectedBike.price * 8 : 0;
+    const selectedBike = bikes.find(bike => bike.name === formData.motorcycle.selectedMotorcycle);
+    const bikeHire = selectedBike && formData.motorcycle.hireOption === 'Hire a Motorcycle' ? selectedBike.price * 8 : 0;
     const eventPackage = formData.accommodationPreference === '$4890 - PRIVATE ACCOMMODATION' ? 4890 : 3699;
     const partnerFee = formData.registerPartner === 'Yes' ? 4890 : 0;
     const subtotal = eventPackage + partnerFee + bikeHire;
-    const discount = formData.paymentOption === 'Full Payment' ? 50 : 0;
+    const discount = formData.payment?.paymentOption === 'Full Payment' ? 50 : 0;
     const afterDiscount = subtotal - discount;
-    const merchantFee = formData.paymentOption === 'Deposit'
+    const merchantFee = formData.payment?.paymentOption === 'Deposit'
       ? (formData.registerPartner === 'Yes' ? 33.66 : 16.83)
       : (afterDiscount * 0.015 + 0.02).toFixed(2);
-    const total = formData.paymentOption === 'Deposit'
+    const total = formData.payment?.paymentOption === 'Deposit'
       ? (formData.registerPartner === 'Yes' ? 990 + 990 + 33.66 : 990 + 16.83)
-      : formData.paymentOption === 'Three Payments'
+      : formData.payment?.paymentOption === 'Three Payments'
       ? ((subtotal / 3) + (subtotal / 3) * 0.015 + 0.02).toFixed(2)
       : (afterDiscount + parseFloat(merchantFee)).toFixed(2);
     console.log('calculateTotalPayment:', { eventPackage, partnerFee, bikeHire, subtotal, discount, merchantFee, total });
     return total;
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  console.log('handleSubmit: Form submission triggered', { formData, loading });
-  if (!validateStep(currentStep)) {
-    console.log('handleSubmit: Validation failed', errors);
-    setApiError('Validation failed. Please check the form for errors.');
-    return;
-  }
-  console.log('handleSubmit: Validation passed, proceeding with submission');
-  setLoading(true);
-  setApiError(null);
-
-  try {
-    const token = localStorage.getItem('token');
-    console.log('handleSubmit: JWT token', token || 'No token found');
-    if (!token) {
-      throw new Error('No authentication token found. Please log in.');
-    }
-
-    // Validate required fields
-    const validationErrors = [];
-    // Personal Details
-    if (!formData.firstName) validationErrors.push('First name is required.');
-    if (!formData.lastName) validationErrors.push('Last name is required.');
-    if (!formData.gender) validationErrors.push('Gender is required.');
-    if (!formData.email) validationErrors.push('Email is required.');
-    if (!formData.birthday) validationErrors.push('Birthday is required.');
-    if (!formData.occupation) validationErrors.push('Occupation is required.');
-    if (!formData.mobile) validationErrors.push('Mobile number is required.');
-    if (!formData.address) validationErrors.push('Address is required.');
-    if (!formData.city) validationErrors.push('City is required.');
-    if (!formData.postCode) validationErrors.push('Postcode is required.');
-    if (!formData.country) validationErrors.push('Country is required.');
-    // Emergency Contacts
-    const emergency1 = {
-      firstName: formData.emergency1FirstName,
-      lastName: formData.emergency1LastName,
-      email: formData.emergency1Email,
-      mobile: formData.emergency1Mobile,
-      landline: formData.emergency1Landline,
-      relationship: formData.emergency1Relationship,
-    };
-    const emergency2 = {
-      firstName: formData.emergency2FirstName,
-      lastName: formData.emergency2LastName,
-      email: formData.emergency2Email,
-      mobile: formData.emergency2Mobile,
-      landline: formData.emergency2Landline,
-      relationship: formData.emergency2Relationship,
-    };
-    if (
-      !emergency1.firstName ||
-      !emergency1.lastName ||
-      !emergency1.email ||
-      !emergency1.mobile ||
-      !emergency1.relationship
-    ) {
-      validationErrors.push('All fields for first emergency contact are required.');
-    }
-    if (
-      !emergency2.firstName ||
-      !emergency2.lastName ||
-      !emergency2.email ||
-      !emergency2.mobile ||
-      !emergency2.relationship
-    ) {
-      validationErrors.push('All fields for second emergency contact are required.');
-    }
-    // Medical Info
-    if (!formData.hasMedicalCondition) validationErrors.push('Medical condition status is required.');
-    if (!formData.hasMedicationAllergies) validationErrors.push('Medication allergies status is required.');
-    if (!formData.hasFoodAllergies) validationErrors.push('Food allergies status is required.');
-    // Experience
-    if (!formData.hasTraining) validationErrors.push('Training status is required.');
-    if (!formData.experienceLevel) validationErrors.push('Experience level is required.');
-    // Motorcycle
-    if (!formData.hireOption) validationErrors.push('Hire option is required.');
-    // Licence Details
-    if (!formData.licenceValid) validationErrors.push('Licence validity status is required.');
-    if (!formData.licenceNumber) validationErrors.push('Licence number is required.');
-    if (!formData.licenceExpiryDate) validationErrors.push('Licence expiry date is required.');
-    if (!formData.licenceState) validationErrors.push('Licence state is required.');
-    // Equipment
-    if (!formData.bootBrand) validationErrors.push('Boot brand is required.');
-    if (!formData.shirtSize) validationErrors.push('Shirt size is required.');
-    // Accommodation
-    if (!formData.accommodationPreference) validationErrors.push('Accommodation preference is required.');
-    // Group
-    if (!formData.ridingWithGroup) validationErrors.push('Riding with group status is required.');
-    // Terms
-    if (!formData.agreeToTerms) validationErrors.push('You must agree to the terms.');
-    if (!formData.termsAgreement) validationErrors.push('Terms agreement is required.');
-    // Payment
-    if (!formData.paymentOption) validationErrors.push('Payment option is required.');
-    const totalPayment = parseFloat(calculateTotalPayment());
-    if (!totalPayment || isNaN(totalPayment)) validationErrors.push('Valid total payment is required.');
-
-    if (validationErrors.length > 0) {
-      console.log('handleSubmit: Validation errors', validationErrors);
-      setApiError(validationErrors.join(' '));
-      alert(validationErrors.join(' '));
-      setLoading(false);
+  // ✅ FIXED: COMPLETE handleSubmit with SEPARATE LICENCE FIELDS
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('handleSubmit: Form submission triggered', { formData, loading });
+    
+    if (!validateStep(currentStep)) {
+      console.log('handleSubmit: Validation failed', errors);
+      setApiError('Validation failed. Please check the form for errors.');
       return;
     }
+    
+    console.log('handleSubmit: Validation passed, proceeding with submission');
+    setLoading(true);
+    setApiError(null);
 
-    const payload = {
-      personalDetails: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        gender: formData.gender,
-        email: formData.email,
-        confirmEmail: formData.confirmEmail,
-        birthday: formData.birthday,
-        occupation: formData.occupation,
-        mobile: formData.mobile,
-        landline: formData.landline,
-        address: formData.address,
-        address2: formData.address2,
-        city: formData.city,
-        postCode: formData.postCode,
-        country: formData.country,
-        state: formData.state,
-        phonePlatform: formData.phonePlatform,
-        phoneModel: formData.phoneModel,
-        hasGPS: formData.hasGPS,
-        hasFacebook: formData.hasFacebook,
-      },
-      emergencyContacts: {
-        emergency1,
-        emergency2,
-      },
-      medicalInfo: {
-        hasMedicalCondition: formData.hasMedicalCondition,
-        medicalCondition: formData.medicalCondition,
-        medications: formData.medications,
-        hasMedicationAllergies: formData.hasMedicationAllergies,
-        medicationAllergies: formData.medicationAllergies,
-        hasFoodAllergies: formData.hasFoodAllergies,
-        foodAllergies: formData.foodAllergies,
-        dietaryRequirements: formData.dietaryRequirements,
-        hasHealthFund: formData.hasHealthFund,
-        healthFundName: formData.healthFundName,
-        healthFundNumber: formData.healthFundNumber,
-        hasAmbulanceCover: formData.hasAmbulanceCover,
-        medicareNumber: formData.medicareNumber,
-        medicarePosition: formData.medicarePosition,
-      },
-      experience: {
-        hasTraining: formData.hasTraining,
-        recentTraining: formData.recentTraining,
-        trainingDetails: formData.trainingDetails,
-        offRoadExperience: formData.offRoadExperience,
-        experienceLevel: formData.experienceLevel,
-        confidenceAreas: formData.confidenceAreas,
-      },
-      motorcycle: {
-        hireOption: formData.hireOption,
-        selectedMotorcycle: formData.selectedMotorcycle,
-        ownBike: {
-          make: formData.ownBikeMake,
-          model: formData.ownBikeModel,
-          year: formData.ownBikeYear,
-          registrationNumber: formData.ownBikeRegistrationNumber,
-          stateOrRegion: formData.ownBikeStateOrRegion,
-          odometer: formData.ownBikeOdometer,
-          serviceUpToDate: formData.ownBikeServiceUpToDate,
-          serviceIntention: formData.ownBikeServiceIntention,
-          hasUnresolvedIssues: formData.ownBikeHasUnresolvedIssues,
-          issuesDetails: formData.ownBikeIssuesDetails,
-          hasComprehensiveInsurance: formData.ownBikeHasComprehensiveInsurance,
-          fuelCapacity: formData.ownBikeFuelCapacity,
-          estimatedRange: formData.ownBikeEstimatedRange,
+    try {
+      const token = localStorage.getItem('token');
+      console.log('handleSubmit: JWT token', token || 'No token found');
+      if (!token) {
+        throw new Error('No authentication token found. Please log in.');
+      }
+
+      const validationErrors = [];
+      if (!formData.firstName) validationErrors.push('First name is required.');
+      if (!formData.lastName) validationErrors.push('Last name is required.');
+      if (!formData.gender) validationErrors.push('Gender is required.');
+      if (!formData.email) validationErrors.push('Email is required.');
+      if (!formData.birthday) validationErrors.push('Birthday is required.');
+      if (!formData.occupation) validationErrors.push('Occupation is required.');
+      if (!formData.mobile) validationErrors.push('Mobile number is required.');
+      if (!formData.address) validationErrors.push('Address is required.');
+      if (!formData.city) validationErrors.push('City is required.');
+      if (!formData.postCode) validationErrors.push('Postcode is required.');
+      if (!formData.country) validationErrors.push('Country is required.');
+      if (!formData.emergency1FirstName) validationErrors.push('Emergency contact 1 first name is required.');
+      if (!formData.emergency1LastName) validationErrors.push('Emergency contact 1 last name is required.');
+      if (!formData.emergency1Email) validationErrors.push('Emergency contact 1 email is required.');
+      if (!formData.emergency1Mobile) validationErrors.push('Emergency contact 1 mobile is required.');
+      if (!formData.emergency1Relationship) validationErrors.push('Emergency contact 1 relationship is required.');
+      if (!formData.emergency2FirstName) validationErrors.push('Emergency contact 2 first name is required.');
+      if (!formData.emergency2LastName) validationErrors.push('Emergency contact 2 last name is required.');
+      if (!formData.emergency2Email) validationErrors.push('Emergency contact 2 email is required.');
+      if (!formData.emergency2Mobile) validationErrors.push('Emergency contact 2 mobile is required.');
+      if (!formData.emergency2Relationship) validationErrors.push('Emergency contact 2 relationship is required.');
+      if (!formData.hasMedicalCondition) validationErrors.push('Medical condition status is required.');
+      if (!formData.hasMedicationAllergies) validationErrors.push('Medication allergies status is required.');
+      if (!formData.hasFoodAllergies) validationErrors.push('Food allergies status is required.');
+      if (!formData.hasTraining) validationErrors.push('Training status is required.');
+      if (!formData.experienceLevel) validationErrors.push('Experience level is required.');
+      if (!formData.motorcycle.hireOption) validationErrors.push('Hire option is required.');
+      if (!formData.licenceValid) validationErrors.push('Licence validity status is required.');
+      if (!formData.licenceNumber) validationErrors.push('Licence number is required.');
+      if (!formData.licenceExpiryDate) validationErrors.push('Licence expiry date is required.');
+      if (!formData.licenceState) validationErrors.push('Licence state is required.');
+      if (!formData.bootBrand) validationErrors.push('Boot brand is required.');
+      if (!formData.shirtSize) validationErrors.push('Shirt size is required.');
+      if (!formData.accommodationPreference) validationErrors.push('Accommodation preference is required.');
+      if (!formData.ridingWithGroup) validationErrors.push('Riding with group status is required.');
+      if (!formData.agreeToTerms) validationErrors.push('You must agree to the terms.');
+      if (!formData.termsAgreement) validationErrors.push('Terms agreement is required.');
+      if (!formData.payment?.paymentOption) validationErrors.push('Payment option is required.');
+      
+      const totalPayment = parseFloat(calculateTotalPayment());
+      if (!totalPayment || isNaN(totalPayment)) validationErrors.push('Valid total payment is required.');
+
+      if (validationErrors.length > 0) {
+        console.log('handleSubmit: Validation errors', validationErrors);
+        setApiError(validationErrors.join(' '));
+        alert(validationErrors.join(' '));
+        setLoading(false);
+        return;
+      }
+
+      // ✅ FIXED: Create payload WITHOUT licenceDetails (send separately)
+      const payload = {
+        personalDetails: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          gender: formData.gender,
+          email: formData.email,
+          confirmEmail: formData.confirmEmail,
+          birthday: formData.birthday,
+          occupation: formData.occupation,
+          mobile: formData.mobile,
+          landline: formData.landline,
+          address: formData.address,
+          address2: formData.address2,
+          city: formData.city,
+          postCode: formData.postCode,
+          country: formData.country,
+          state: formData.state,
+          phonePlatform: formData.phonePlatform,
+          phoneModel: formData.phoneModel,
+          hasGPS: formData.hasGPS,
+          hasFacebook: formData.hasFacebook
         },
-      },
-      licenceDetails: {
-        licenceValid: formData.licenceValid,
-        licenceNumber: formData.licenceNumber,
-        licenceExpiryDate: formData.licenceExpiryDate ? new Date(formData.licenceExpiryDate) : null,
-        licenceState: formData.licenceState,
-      },
-      equipment: {
-        hydration: formData.hydration,
-        electronicEquipment: formData.electronicEquipment,
-        upperProtective: formData.upperProtective,
-        lowerProtective: formData.lowerProtective,
-        bootBrand: formData.bootBrand,
-        mechanicalRelated: formData.mechanicalRelated,
-        shirtSize: formData.shirtSize,
-      },
-      accommodation: {
-        accommodationPreference: formData.accommodationPreference,
-        shirtSize: formData.shirtSize,
-        registerPartner: formData.registerPartner,
-      },
-      group: {
-        ridingWithGroup: formData.ridingWithGroup,
-        groupMembers: formData.groupMembers,
-        giftVoucherCode: formData.giftVoucherCode,
-      },
-      terms: {
-        agreeToTerms: formData.agreeToTerms,
-        termsAgreement: formData.termsAgreement,
-      },
-      payment: {
-        paymentOption: formData.paymentOption,
-        totalPayment: parseFloat(calculateTotalPayment()),
-      },
-    };
+        emergencyContacts: {
+          emergency1: {
+            firstName: formData.emergency1FirstName,
+            lastName: formData.emergency1LastName,
+            email: formData.emergency1Email,
+            mobile: formData.emergency1Mobile,
+            landline: formData.emergency1Landline,
+            relationship: formData.emergency1Relationship
+          },
+          emergency2: {
+            firstName: formData.emergency2FirstName,
+            lastName: formData.emergency2LastName,
+            email: formData.emergency2Email,
+            mobile: formData.emergency2Mobile,
+            landline: formData.emergency2Landline,
+            relationship: formData.emergency2Relationship
+          }
+        },
+        medicalInfo: {
+          hasMedicalCondition: formData.hasMedicalCondition,
+          medicalCondition: formData.medicalCondition,
+          medications: formData.medications,
+          hasMedicationAllergies: formData.hasMedicationAllergies,
+          medicationAllergies: formData.medicationAllergies,
+          hasFoodAllergies: formData.hasFoodAllergies,
+          foodAllergies: formData.foodAllergies,
+          dietaryRequirements: formData.dietaryRequirements,
+          hasHealthFund: formData.hasHealthFund,
+          healthFundName: formData.healthFundName,
+          healthFundNumber: formData.healthFundNumber,
+          hasAmbulanceCover: formData.hasAmbulanceCover,
+          medicareNumber: formData.medicareNumber,
+          medicarePosition: formData.medicarePosition
+        },
+        experience: {
+          hasTraining: formData.hasTraining,
+          recentTraining: formData.recentTraining,
+          trainingDetails: formData.trainingDetails,
+          offRoadExperience: formData.offRoadExperience,
+          experienceLevel: formData.experienceLevel,
+          confidenceAreas: formData.confidenceAreas
+        },
+        motorcycle: {
+          hireOption: formData.motorcycle.hireOption,
+          selectedMotorcycle: formData.motorcycle.selectedMotorcycle,
+          ownBike: {
+            make: formData.motorcycle.ownBike.make,
+            model: formData.motorcycle.ownBike.model,
+            year: formData.motorcycle.ownBike.year,
+            registrationNumber: formData.motorcycle.ownBike.registrationNumber,
+            stateOrRegion: formData.motorcycle.ownBike.stateOrRegion,
+            odometer: formData.motorcycle.ownBike.odometer,
+            serviceUpToDate: formData.motorcycle.ownBike.serviceUpToDate,
+            serviceIntention: formData.motorcycle.ownBike.serviceIntention,
+            hasUnresolvedIssues: formData.motorcycle.ownBike.hasUnresolvedIssues,
+            issuesDetails: formData.motorcycle.ownBike.issuesDetails,
+            hasComprehensiveInsurance: formData.motorcycle.ownBike.hasComprehensiveInsurance,
+            fuelCapacity: formData.motorcycle.ownBike.fuelCapacity,
+            estimatedRange: formData.motorcycle.ownBike.estimatedRange
+          }
+        },
+        equipment: {
+          hydration: formData.hydration,
+          electronicEquipment: formData.electronicEquipment,
+          upperProtective: formData.upperProtective,
+          lowerProtective: formData.lowerProtective,
+          bootBrand: formData.bootBrand,
+          mechanicalRelated: formData.mechanicalRelated,
+          shirtSize: formData.shirtSize
+        },
+        accommodation: {
+          accommodationPreference: formData.accommodationPreference,
+          shirtSize: formData.shirtSize,
+          registerPartner: formData.registerPartner
+        },
+        group: {
+          ridingWithGroup: formData.ridingWithGroup,
+          groupMembers: formData.groupMembers,
+          giftVoucherCode: formData.giftVoucherCode
+        },
+        terms: {
+          agreeToTerms: formData.agreeToTerms,
+          termsAgreement: formData.termsAgreement
+        },
+        payment: {
+          paymentOption: formData.payment?.paymentOption,
+          totalPayment: parseFloat(calculateTotalPayment())
+        }
+      };
 
-    const formDataToSend = new FormData();
-    if (formData.licenceFile instanceof File) {
-      console.log('handleSubmit: Adding licenceFile to FormData', {
-        name: formData.licenceFile.name,
-        size: formData.licenceFile.size,
-        type: formData.licenceFile.type,
+      // ✅ FIXED: FormData - LICENCE FIELDS SENT SEPARATELY
+      const formDataToSend = new FormData();
+      
+      // 1. Add licence file
+      if (formData.licenceFile instanceof File) {
+        console.log('handleSubmit: Adding licenceFile to FormData', {
+          name: formData.licenceFile.name,
+          size: formData.licenceFile.size,
+          type: formData.licenceFile.type
+        });
+        if (!['image/jpeg', 'image/png', 'application/pdf'].includes(formData.licenceFile.type)) {
+          throw new Error('Invalid file type. Please upload a JPEG, PNG, or PDF.');
+        }
+        formDataToSend.append('licenceFile', formData.licenceFile);
+      } else {
+        throw new Error('Licence file is required');
+      }
+
+      // ✅ FIXED: Send LICENCE FIELDS AS SEPARATE FIELDS
+      formDataToSend.append('licenceValid', formData.licenceValid || 'Yes');
+      formDataToSend.append('licenceNumber', formData.licenceNumber || '');
+      formDataToSend.append('licenceExpiryDate', formData.licenceExpiryDate ? format(new Date(formData.licenceExpiryDate), 'yyyy-MM-dd') : '');
+      formDataToSend.append('licenceState', formData.licenceState || '');
+
+      // 2. Add ALL OTHER JSON fields (EXCLUDING licenceDetails)
+      for (const key in payload) {
+        if (Array.isArray(payload[key]) || typeof payload[key] === 'object') {
+          formDataToSend.append(key, JSON.stringify(payload[key]));
+        } else {
+          formDataToSend.append(key, payload[key] || '');
+        }
+      }
+
+      // DEBUG: Log FormData
+      console.log('=== FORM DATA DEBUG ===');
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(`${key}: ${value instanceof File ? `File: ${value.name}` : value}`);
+      }
+      console.log('====================');
+
+      const response = await axios.post('/api/nzsiRegistrations/create', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
+        }
       });
-      if (!['image/jpeg', 'image/png', 'application/pdf'].includes(formData.licenceFile.type)) {
-        throw new Error('Invalid file type. Please upload a JPEG, PNG, or PDF.');
-      }
-      formDataToSend.append('licenceFile', formData.licenceFile);
-    } else {
-      console.warn('handleSubmit: No valid licenceFile provided', formData.licenceFile);
-    }
+      
+      console.log('handleSubmit: Response received', response.data);
+      const { registrationId, emailStatus, paymentSessionId } = response.data;
+      console.log('handleSubmit: Registration created with ID:', registrationId);
 
-    for (const key in payload) {
-      if (key === 'licenceExpiryDate') {
-        formDataToSend.append(key, payload[key] ? format(payload[key], 'yyyy-MM-dd') : '');
-      } else if (Array.isArray(payload[key]) || typeof payload[key] === 'object') {
-        formDataToSend.append(key, JSON.stringify(payload[key]));
+      let message = 'Registration submitted successfully!';
+      if (emailStatus) {
+        const { userEmailSent, adminEmailSent, errors } = emailStatus;
+        if (userEmailSent && adminEmailSent) {
+          message += ' Confirmation emails sent to you and the admin.';
+        } else if (userEmailSent) {
+          message += ' Confirmation email sent to you, but admin email failed.';
+        } else if (adminEmailSent) {
+          message += ' Confirmation email sent to admin, but user email failed.';
+        } else {
+          message += ' Email notifications failed.';
+        }
+        if (errors?.length > 0) {
+          console.warn('handleSubmit: Email errors:', errors);
+          message += ' Some email notifications could not be sent.';
+        }
+      }
+
+      if (paymentSessionId) {
+        console.log('handleSubmit: Redirecting to Stripe checkout', paymentSessionId);
+        const stripe = await stripePromise;
+        const { error } = await stripe.redirectToCheckout({ sessionId: paymentSessionId });
+        if (error) {
+          console.error('handleSubmit: Stripe redirect error', error);
+          throw new Error(`Stripe checkout failed: ${error.message}`);
+        }
       } else {
-        formDataToSend.append(key, payload[key] || '');
+        console.warn('handleSubmit: No payment session ID received');
+        message += ' Registration created, but payment setup failed. Please contact support.';
       }
+
+      alert(message);
+      
+      // Reset form
+      setCurrentStep(1);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        gender: '',
+        email: '',
+        confirmEmail: '',
+        birthday: '',
+        occupation: '',
+        mobile: '',
+        landline: '',
+        address: '',
+        address2: '',
+        city: '',
+        postCode: '',
+        country: 'Australia',
+        state: '',
+        phonePlatform: '',
+        phoneModel: '',
+        hasGPS: '',
+        hasFacebook: '',
+        emergency1FirstName: '',
+        emergency1LastName: '',
+        emergency1Email: '',
+        emergency1Mobile: '',
+        emergency1Landline: '',
+        emergency1Relationship: '',
+        emergency2FirstName: '',
+        emergency2LastName: '',
+        emergency2Email: '',
+        emergency2Mobile: '',
+        emergency2Landline: '',
+        emergency2Relationship: '',
+        hasMedicalCondition: '',
+        medicalCondition: '',
+        medications: '',
+        hasMedicationAllergies: '',
+        medicationAllergies: '',
+        hasFoodAllergies: '',
+        foodAllergies: '',
+        dietaryRequirements: '',
+        hasHealthFund: '',
+        healthFundName: '',
+        healthFundNumber: '',
+        hasAmbulanceCover: '',
+        medicareNumber: '',
+        medicarePosition: '',
+        hasTraining: '',
+        recentTraining: '',
+        trainingDetails: '',
+        offRoadExperience: '',
+        experienceLevel: '',
+        confidenceAreas: '',
+        motorcycle: {
+          hireOption: '',
+          selectedMotorcycle: '',
+          ownBike: {
+            make: '',
+            model: '',
+            year: '',
+            registrationNumber: '',
+            stateOrRegion: '',
+            odometer: '',
+            serviceUpToDate: '',
+            serviceIntention: '',
+            hasUnresolvedIssues: '',
+            issuesDetails: '',
+            hasComprehensiveInsurance: '',
+            fuelCapacity: '',
+            estimatedRange: ''
+          }
+        },
+        licenceValid: '',
+        licenceNumber: '',
+        licenceExpiryDate: null,
+        licenceState: '',
+        licenceFile: null,
+        hydration: [],
+        electronicEquipment: [],
+        upperProtective: [],
+        lowerProtective: [],
+        bootBrand: '',
+        mechanicalRelated: [],
+        shirtSize: '',
+        accommodationPreference: '',
+        registerPartner: '',
+        ridingWithGroup: '',
+        groupMembers: '',
+        giftVoucherCode: '',
+        agreeToTerms: false,
+        termsAgreement: '',
+        payment: {
+          paymentOption: ''
+        }
+      });
+    } catch (err) {
+      console.error('handleSubmit: Submission error', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        stack: err.stack
+      });
+      const message = err.response?.data?.message || `Failed to submit registration or initiate payment: ${err.message}. Please try again or contact support.`;
+      setApiError(message);
+      alert(message);
+    } finally {
+      setLoading(false);
     }
-
-    console.log('handleSubmit: Submitting FormData:');
-    for (let [key, value] of formDataToSend.entries()) {
-      console.log(`${key}: ${value instanceof File ? `File: ${value.name}` : value}`);
-    }
-
-    const response = await axios.post('/api/nzsiRegistrations/create', formDataToSend, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    console.log('handleSubmit: Response received', response.data);
-    const { registrationId, emailStatus, paymentSessionId } = response.data;
-    console.log('handleSubmit: Registration created with ID:', registrationId);
-
-    let message = 'Registration submitted successfully!';
-    if (emailStatus) {
-      const { userEmailSent, adminEmailSent, errors } = emailStatus;
-      if (userEmailSent && adminEmailSent) {
-        message += ' Confirmation emails sent to you and the admin.';
-      } else if (userEmailSent) {
-        message += ' Confirmation email sent to you, but admin email failed.';
-      } else if (adminEmailSent) {
-        message += ' Confirmation email sent to admin, but user email failed.';
-      } else {
-        message += ' Email notifications failed.';
-      }
-      if (errors?.length > 0) {
-        console.warn('handleSubmit: Email errors:', errors);
-        message += ' Some email notifications could not be sent.';
-      }
-    }
-
-    if (paymentSessionId) {
-      console.log('handleSubmit: Redirecting to Stripe checkout', paymentSessionId);
-      const stripe = await stripePromise;
-      const { error } = await stripe.redirectToCheckout({ sessionId: paymentSessionId });
-      if (error) {
-        console.error('handleSubmit: Stripe redirect error', error);
-        throw new Error(`Stripe checkout failed: ${error.message}`);
-      }
-    } else {
-      console.warn('handleSubmit: No payment session ID received');
-      message += ' Registration created, but payment setup failed. Please contact support.';
-    }
-
-    alert(message);
-    setCurrentStep(1);
-    setFormData({
-      firstName: '',
-      lastName: '',
-      gender: '',
-      email: '',
-      confirmEmail: '',
-      birthday: '',
-      occupation: '',
-      mobile: '',
-      landline: '',
-      address: '',
-      address2: '',
-      city: '',
-      postCode: '',
-      country: 'Australia',
-      state: '',
-      phonePlatform: '',
-      phoneModel: '',
-      hasGPS: '',
-      hasFacebook: '',
-      emergency1FirstName: '',
-      emergency1LastName: '',
-      emergency1Email: '',
-      emergency1Mobile: '',
-      emergency1Landline: '',
-      emergency1Relationship: '',
-      emergency2FirstName: '',
-      emergency2LastName: '',
-      emergency2Email: '',
-      emergency2Mobile: '',
-      emergency2Landline: '',
-      emergency2Relationship: '',
-      hasMedicalCondition: '',
-      medicalCondition: '',
-      medications: '',
-      hasMedicationAllergies: '',
-      medicationAllergies: '',
-      hasFoodAllergies: '',
-      foodAllergies: '',
-      dietaryRequirements: '',
-      hasHealthFund: '',
-      healthFundName: '',
-      healthFundNumber: '',
-      hasAmbulanceCover: '',
-      medicareNumber: '',
-      medicarePosition: '',
-      hasTraining: '',
-      recentTraining: '',
-      trainingDetails: '',
-      offRoadExperience: '',
-      experienceLevel: '',
-      confidenceAreas: '',
-      hireOption: '',
-      selectedMotorcycle: '',
-      ownBikeMake: '',
-      ownBikeModel: '',
-      ownBikeYear: '',
-      ownBikeRegistrationNumber: '',
-      ownBikeStateOrRegion: '',
-      ownBikeOdometer: '',
-      ownBikeServiceUpToDate: '',
-      ownBikeServiceIntention: '',
-      ownBikeHasUnresolvedIssues: '',
-      ownBikeIssuesDetails: '',
-      ownBikeHasComprehensiveInsurance: '',
-      ownBikeFuelCapacity: '',
-      ownBikeEstimatedRange: '',
-      licenceValid: '',
-      licenceNumber: '',
-      licenceExpiryDate: null,
-      licenceState: '',
-      licenceFile: null,
-      hydration: [],
-      electronicEquipment: [],
-      upperProtective: [],
-      lowerProtective: [],
-      bootBrand: '',
-      mechanicalRelated: [],
-      shirtSize: '',
-      accommodationPreference: '',
-      registerPartner: '',
-      ridingWithGroup: '',
-      groupMembers: '',
-      giftVoucherCode: '',
-      agreeToTerms: false,
-      termsAgreement: '',
-      paymentOption: '',
-    });
-  } catch (err) {
-    console.error('handleSubmit: Submission error', {
-      message: err.message,
-      response: err.response?.data,
-      status: err.response?.status,
-      stack: err.stack,
-    });
-    const message = err.response?.data?.message || `Failed to submit registration or initiate payment: ${err.message}. Please try again or contact support.`;
-    setApiError(message);
-    alert(message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
@@ -684,7 +726,7 @@ const handleSubmit = async (e) => {
 
   const renderStepContent = () => {
     console.log('renderStepContent: Rendering step', currentStep);
-    const stepProps = { formData, handleInputChange, errors, calculateTotalPayment };
+    const stepProps = { formData, handleInputChange, errors, calculateTotalPayment, motorcycles: bikes, bikesLoading };
     switch (currentStep) {
       case 1: return <Step1 />;
       case 2: return <Step2 {...stepProps} />;

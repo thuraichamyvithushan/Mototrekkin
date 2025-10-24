@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin } from 'lucide-react';
 
 const OffRoadContact = () => {
   return (
-    <section className="py-20 bg-gradient-to-r from-black to-gray-800">
+    <section id='contactforinfo' className="py-20 bg-gradient-to-r from-black to-gray-800">
       <div className="max-w-7xl mx-auto px-6 text-center">
         <h2 className="text-4xl font-bold text-yellow-500 mb-6">
           Ready to Start Your Training Journey?

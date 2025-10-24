@@ -11,6 +11,9 @@ import authRoutes from "./routes/authRoutes.js";
 import BikeBooking from "./models/BikeBooking.js"; // Import for webhook
 
 import nzsiRegistrationRoutes from './routes/nzsiRegistration.js';
+import mdpPhase2Routes from './routes/mdpPhase2Routes.js';
+import MDPPhase2Registration from './models/MDPPhase2Registration.js';
+import mdpPhase2BikesRouter from './routes/mdpPhase2Bikes.js'; // Added import
 
 dotenv.config();
 
@@ -33,6 +36,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.raw({ type: "application/json" })); // For Stripe webhook
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// Optional: Serve bike images from backend if not using frontend public directory
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 // Routes
 app.use("/api/bookings", bookingRoutes); // For general service bookings
@@ -41,6 +46,9 @@ app.use("/api/auth", authRoutes);
 
 app.use('/api/nzsiRegistrations', nzsiRegistrationRoutes);
 app.use('/api/nzsiRegistrations/user/:userId', nzsiRegistrationRoutes);
+
+app.use('/api/mdpPhase2Registrations', mdpPhase2Routes);
+app.use('/api/bikes', mdpPhase2BikesRouter);
 
 // Stripe webhook
 app.post("/api/webhook", (req, res) => {

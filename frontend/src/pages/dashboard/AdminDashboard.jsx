@@ -15,9 +15,10 @@ import AdminDashboardDefaultData from "../../components/dashboard/admindashboard
 import AdminUsers from "../../components/dashboard/admindashboard/AdminUsers";
 import AdminOrders from "../../components/dashboard/admindashboard/AdminOrders";
 import AdminProducts from "../../components/dashboard/admindashboard/AdminProducts";
-import AdminEvents from "../../components/dashboard/admindashboard/AdminEvents";
+import AdminEvents from "../../components/dashboard/admindashboard/AdminTrainings";
 import AdminBikeHire from "../../components/dashboard/admindashboard/AdminBikeHire";
 import AdminEventBookings from "../../components/dashboard/admindashboard/AdminEventBookings";
+import AdminTrainings from "../../components/dashboard/admindashboard/AdminTrainings";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -35,6 +36,8 @@ const AdminDashboard = () => {
         return <AdminBikeHire />;
       case "event bookings":
         return <AdminEventBookings />;
+      case "Trainings bookings":
+        return <AdminTrainings />;
       case "products":
         return <AdminProducts />;
       case "events":
@@ -81,6 +84,7 @@ const AdminDashboard = () => {
               { name: "service bookings", icon: Wrench },
               { name: "bike hire", icon: Bike },
               { name: "event bookings", icon: Bike },
+              { name: "Trainings bookings", icon: Bike },
               { name: "products", icon: Box },
               { name: "events", icon: Calendar },
               { name: "logout", icon: LogOut },

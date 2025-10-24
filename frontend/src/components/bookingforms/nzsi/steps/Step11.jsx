@@ -10,7 +10,7 @@ const Step11 = ({ formData, handleInputChange, errors }) => {
         <h4 className="text-lg font-semibold text-gray-900 mb-4">Terms and Conditions Document</h4>
         <div className="border border-gray-300 rounded-lg overflow-hidden">
           <iframe
-            src="/pdfs/Moto-Trekkin-Event-Terms-and-Conditions-V1.01.26.pdf"
+            src="/assets/Moto-Trekkin-Masterclass-event-terms-and-conditions-V1.22.01.15-1.pdf"
             width="100%"
             height="600"
             className="border-0"
@@ -18,7 +18,7 @@ const Step11 = ({ formData, handleInputChange, errors }) => {
           />
         </div>
         <div className="mt-2 text-sm text-gray-600">
-          <p>If the PDF doesn't load, you can <a href="/pdfs/Moto-Trekkin-Event-Terms-and-Conditions-V1.01.26.pdf" target="_blank" className="text-blue-600 hover:underline">download it here</a>.</p>
+          <p>If the PDF doesn't load, you can <a href="/assets/Moto-Trekkin-Masterclass-event-terms-and-conditions-V1.22.01.15-1.pdf" target="_blank" className="text-blue-600 hover:underline">download it here</a>.</p>
         </div>
       </div>
       

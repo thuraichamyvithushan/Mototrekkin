@@ -1,354 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-// Import bike images
-import bmw1300GS from '../../../../assets/adventures/2025/NZSI/Bikes/BMW-1300-GS-A-1.webp';
-import bmwF750GS from '../../../../assets/adventures/2025/NZSI/Bikes/BMW-F750GS_165031-scaled.webp';
-import bmwF800GS from '../../../../assets/adventures/2025/NZSI/Bikes/BMW-F800GS.webp';
-import bmwF850GS from '../../../../assets/adventures/2025/NZSI/Bikes/BMW-F850GS_165032-scaled.webp';
-import bmwR1200GS from '../../../../assets/adventures/2025/NZSI/Bikes/BMW-R1200GS_GSA-_165034-scaled.webp';
-import bmwR1200GSLow from '../../../../assets/adventures/2025/NZSI/Bikes/BMW R1200GS LOW.webp';
-import bmwF850GSLowHigh from '../../../../assets/adventures/2025/NZSI/Bikes/BMW F850GS LOW  HIGH SEAT.webp';
-import hondaCB500X from '../../../../assets/adventures/2025/NZSI/Bikes/Honda-CB500X_165042-scaled.webp';
-import hondaNX500 from '../../../../assets/adventures/2025/NZSI/Bikes/HONDA-NX500-1.webp';
-import yamahaTenere700 from '../../../../assets/adventures/2025/NZSI/Bikes/Yamaha-XTZ690-T7-Tenere-700_165048-scaled.webp';
+const Step6 = ({ formData, handleInputChange, errors, motorcycles, bikesLoading }) => {
+  // Log formData.motorcycle.hireOption on render to verify state
+  useEffect(() => {
+    console.log('Step6: Current formData.motorcycle.hireOption:', formData.motorcycle.hireOption);
+  }, [formData.motorcycle.hireOption]);
 
-const motorcycles = [
-  { 
-    name: 'BMW R1250GS ADV', 
-    price: 0, 
-    available: false, 
-    remaining: 0, 
-    image: null,
-    specs: null
-  },
-  { 
-    name: 'BMW 1300 GS ADV', 
-    price: 440, 
-    available: true, 
-    remaining: 1, 
-    image: bmw1300GS,
-    specs: {
-      mileage: 'Not Available',
-      displacement: '1300 cc',
-      engineType: 'Air/Liquid-cooled Four Stroke Flat Twin Engine, Double Overhead Camshaft, One Balance Shaft and Variable Engine Timing System BMW Shiftcam.',
-      cylinders: '2',
-      maxPower: 'Not Available',
-      maxTorque: 'Not Available',
-      frontBrake: 'Not Available',
-      rearBrake: 'Not Available',
-      fuelCapacity: '19 L',
-      bodyType: 'Adventure Tourer Bikes'
-    }
-  },
-  { 
-    name: 'BMW R1250GS', 
-    price: 0, 
-    available: false, 
-    remaining: 0, 
-    image: null,
-    specs: null
-  },
-  { 
-    name: 'BMW R1200GS', 
-    price: 279, 
-    available: true, 
-    remaining: 11, 
-    image: bmwR1200GS,
-    specs: {
-      mileage: '16 kmpl',
-      displacement: '1170 cc',
-      engineType: 'Air/Liquid-cooled Four Stroke Flat Twin Engine, Double Overhead Camshaft, One Balance Shaft and Variable Engine Timing System BMW Shiftcam.',
-      cylinders: '2',
-      maxPower: '125 PS @ 7750 rpm',
-      maxTorque: '125 Nm @ 6500 rpm',
-      frontBrake: 'Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: '20 L',
-      bodyType: 'Adventure Tourer Bikes'
-    }
-  },
-  { 
-    name: 'BMW R1200GS LOW', 
-    price: 279, 
-    available: true, 
-    remaining: 2, 
-    image: bmwR1200GSLow,
-    specs: {
-      mileage: '16 kmpl',
-      displacement: '1170 cc',
-      engineType: 'Air/Liquid-cooled Four Stroke Flat Twin Engine, Double Overhead Camshaft, One Balance Shaft and Variable Engine Timing System BMW Shiftcam.',
-      cylinders: '2',
-      maxPower: '125 PS @ 7750 rpm',
-      maxTorque: '125 Nm @ 6500 rpm',
-      frontBrake: 'Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: '20 L',
-      bodyType: 'Adventure Tourer Bikes'
-    }
-  },
-  { 
-    name: 'BMW R1200GS ADV', 
-    price: 279, 
-    available: true, 
-    remaining: 1, 
-    image: bmwR1200GS,
-    specs: {
-      mileage: '16 kmpl',
-      displacement: '1170 cc',
-      engineType: 'Air/Liquid-cooled Four Stroke Flat Twin Engine, Double Overhead Camshaft, One Balance Shaft and Variable Engine Timing System BMW Shiftcam.',
-      cylinders: '2',
-      maxPower: '125 PS @ 7750 rpm',
-      maxTorque: '125 Nm @ 6500 rpm',
-      frontBrake: 'Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: '20 L',
-      bodyType: 'Adventure Tourer Bikes'
-    }
-  },
-  { 
-    name: 'BMW F850GS', 
-    price: 0, 
-    available: false, 
-    remaining: 0, 
-    image: null,
-    specs: null
-  },
-  { 
-    name: 'BMW F850GS LOW / HIGH SEAT', 
-    price: 259, 
-    available: true, 
-    remaining: 1, 
-    image: bmwF850GSLowHigh,
-    specs: {
-      mileage: '24 kmpl',
-      displacement: '853 cc',
-      engineType: 'Water-cooled 4-Stroke In-line Two-cylinder Engine, Four Valves Per Cylinder, Two Overhead Camshafts, Dry Sump Lubrication',
-      cylinders: '2',
-      maxPower: '95.17 PS @ 8250 rpm',
-      maxTorque: '92 Nm @ 6250 rpm',
-      frontBrake: 'Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: '23 L',
-      bodyType: 'Adventure Tourer Bikes'
-    }
-  },
-  { 
-    name: 'BMW F850GS LOW SEAT', 
-    price: 259, 
-    available: true, 
-    remaining: 1, 
-    image: bmwF850GS,
-    specs: {
-      mileage: '24 kmpl',
-      displacement: '853 cc',
-      engineType: 'Water-cooled 4-Stroke In-line Two-cylinder Engine, Four Valves Per Cylinder, Two Overhead Camshafts, Dry Sump Lubrication',
-      cylinders: '2',
-      maxPower: '95.17 PS @ 8250 rpm',
-      maxTorque: '92 Nm @ 6250 rpm',
-      frontBrake: 'Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: '23 L',
-      bodyType: 'Adventure Tourer Bikes'
-    }
-  },
-  { 
-    name: 'BMW F750GS', 
-    price: 229, 
-    available: true, 
-    remaining: 1, 
-    image: bmwF750GS,
-    specs: {
-      mileage: '25 kmpl',
-      displacement: '853 cc',
-      engineType: 'Water-cooled 4-Stroke In-line Two-cylinder Engine, Four Valves Per Cylinder, Two Overhead Camshafts, Dry Sump Lubrication',
-      cylinders: '2',
-      maxPower: '77.49 PS @ 7500 rpm',
-      maxTorque: '83 Nm @ 6000 rpm',
-      frontBrake: 'Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: '15 L',
-      bodyType: 'Adventure Tourer Bikes'
-    }
-  },
-  { 
-    name: 'BMW F750GS LOW', 
-    price: 229, 
-    available: true, 
-    remaining: 2, 
-    image: bmwF750GS,
-    specs: {
-      mileage: '25 kmpl',
-      displacement: '853 cc',
-      engineType: 'Water-cooled 4-Stroke In-line Two-cylinder Engine, Four Valves Per Cylinder, Two Overhead Camshafts, Dry Sump Lubrication',
-      cylinders: '2',
-      maxPower: '77.49 PS @ 7500 rpm',
-      maxTorque: '83 Nm @ 6000 rpm',
-      frontBrake: 'Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: '15 L',
-      bodyType: 'Adventure Tourer Bikes'
-    }
-  },
-  { 
-    name: 'BMW F800GS', 
-    price: 229, 
-    available: true, 
-    remaining: 1, 
-    image: bmwF800GS,
-    specs: {
-      mileage: '---',
-      displacement: '798 cc',
-      engineType: 'Engine is liquid cooled with fuel injection',
-      cylinders: '2',
-      maxPower: '75 Bhp',
-      maxTorque: '76 Nm',
-      frontBrake: 'Double Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: 'Not Available',
-      bodyType: 'Adventure Tourer Bikes'
-    }
-  },
-  { 
-    name: 'BMW F800GS LOW', 
-    price: 229, 
-    available: true, 
-    remaining: 2, 
-    image: bmwF800GS,
-    specs: {
-      mileage: '---',
-      displacement: '798 cc',
-      engineType: 'Engine is liquid cooled with fuel injection',
-      cylinders: '2',
-      maxPower: '75 Bhp',
-      maxTorque: '76 Nm',
-      frontBrake: 'Double Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: 'Not Available',
-      bodyType: 'Adventure Tourer Bikes'
-    }
-  },
-  { 
-    name: 'BMW F800GS ADV', 
-    price: 0, 
-    available: false, 
-    remaining: 0, 
-    image: null,
-    specs: null
-  },
-  { 
-    name: 'BMW F800GS ADV LOW', 
-    price: 0, 
-    available: false, 
-    remaining: 0, 
-    image: null,
-    specs: null
-  },
-  { 
-    name: 'Honda CB500X', 
-    price: 179, 
-    available: true, 
-    remaining: 1, 
-    image: hondaCB500X,
-    specs: {
-      mileage: '28 kmpl',
-      displacement: '471.03 cc',
-      engineType: '4 Stroke, SI Engine (Parallel Twin)',
-      cylinders: '2',
-      maxPower: '47.58 PS @ 8500 rpm',
-      maxTorque: '43.2 Nm @ 6500 rpm',
-      frontBrake: 'Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: '17.7 L',
-      bodyType: 'Adventure Tourer Bikes, Off Road Bikes'
-    }
-  },
-  { 
-    name: 'Honda NX500', 
-    price: 179, 
-    available: true, 
-    remaining: 1, 
-    image: hondaNX500,
-    specs: {
-      mileage: '28 kmpl',
-      displacement: '471.03 cc',
-      engineType: '4 Stroke, SI Engine (Parallel Twin)',
-      cylinders: '2',
-      maxPower: '47.58 PS @ 8500 rpm',
-      maxTorque: '43.2 Nm @ 6500 rpm',
-      frontBrake: 'Disc',
-      rearBrake: 'Disc',
-      fuelCapacity: '17.7 L',
-      bodyType: 'Adventure Tourer Bikes, Off Road Bikes'
-    }
-  },
-  { 
-    name: 'Honda CB500X ADV', 
-    price: 0, 
-    available: false, 
-    remaining: 0, 
-    image: null,
-    specs: null
-  },
-  { 
-    name: 'Yamaha Tenere 700', 
-    price: 209, 
-    available: true, 
-    remaining: 1, 
-    image: yamahaTenere700,
-    specs: {
-      mileage: 'Not Available',
-      displacement: '689 cc',
-      engineType: 'Liquid-cooled, 4-stroke, DOHC, 4 valve, 2-cylinder',
-      cylinders: '2',
-      maxPower: 'Not Available',
-      maxTorque: 'Not Available',
-      frontBrake: 'Not Available',
-      rearBrake: 'Not Available',
-      fuelCapacity: '16 L',
-      bodyType: 'Adventure Tourer Bikes, Off Road Bikes'
-    }
-  },
-  { 
-    name: 'Yamaha Tenere 700 ADV', 
-    price: 0, 
-    available: false, 
-    remaining: 0, 
-    image: null,
-    specs: null
-  },
-  { 
-    name: 'Yamaha Tenere 700 LOW', 
-    price: 0, 
-    available: false, 
-    remaining: 0, 
-    image: null,
-    specs: null
-  },
-  { 
-    name: 'Yamaha Tenere 700 ADV LOW', 
-    price: 0, 
-    available: false, 
-    remaining: 0, 
-    image: null,
-    specs: null
-  }
-];
-
-const Step6 = ({ formData, handleInputChange, errors }) => {
   // Function to get the selected bike image
   const getSelectedBikeImage = () => {
-    const selectedBike = motorcycles.find(bike => bike.name === formData.selectedMotorcycle);
+    const selectedBike = motorcycles?.find(bike => bike.name === formData.motorcycle.selectedMotorcycle);
     return selectedBike ? selectedBike.image : null;
   };
 
   // Function to get the selected bike specifications
   const getSelectedBikeSpecs = () => {
-    const selectedBike = motorcycles.find(bike => bike.name === formData.selectedMotorcycle);
+    const selectedBike = motorcycles?.find(bike => bike.name === formData.motorcycle.selectedMotorcycle);
     return selectedBike ? selectedBike.specs : null;
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" key={formData.motorcycle.hireOption}>
       <h3 className="text-2xl font-bold text-gray-900 mb-6">Motorcycle Selection</h3>
       
       <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
@@ -365,9 +36,12 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
               type="radio"
               name="hireOption"
               value="Hire a Motorcycle"
-              checked={formData.hireOption === 'Hire a Motorcycle'}
-              onChange={handleInputChange}
-              className="mr-2"
+              checked={formData.motorcycle.hireOption === 'Hire a Motorcycle'}
+              onChange={(e) => {
+                console.log('Step6: hireOption changed to:', e.target.value);
+                handleInputChange(e, 'motorcycle');
+              }}
+              className="mr-2 focus:ring-green-500"
             />
             Hire a Motorcycle
           </label>
@@ -376,93 +50,110 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
               type="radio"
               name="hireOption"
               value="Use my own motorcycle"
-              checked={formData.hireOption === 'Use my own motorcycle'}
-              onChange={handleInputChange}
-              className="mr-2"
+              checked={formData.motorcycle.hireOption === 'Use my own motorcycle'}
+              onChange={(e) => {
+                console.log('Step6: hireOption changed to:', e.target.value);
+                handleInputChange(e, 'motorcycle');
+              }}
+              className="mr-2 focus:ring-green-500"
             />
             Use my own motorcycle
           </label>
         </div>
-        {errors.hireOption && <p className="text-red-500 text-sm mt-1">{errors.hireOption}</p>}
+        {errors.hireOption && (
+          <p className="text-red-500 text-sm mt-2 font-medium">{errors.hireOption}</p>
+        )}
       </div>
 
-      {formData.hireOption === 'Hire a Motorcycle' && (
+      {formData.motorcycle.hireOption === 'Hire a Motorcycle' && (
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-4">Choose which motorbike you wish to hire. (Required)</label>
           
-          {/* Grid layout for motorcycles - 6 per row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4">
-          {motorcycles.map((bike, index) => (
-            <label
-              key={index}
-              className={`relative cursor-pointer group ${
-                !bike.available
-                  ? 'cursor-not-allowed opacity-50'
-                  : 'hover:shadow-lg transition-shadow duration-200'
-              } ${
-                formData.selectedMotorcycle === bike.name
-                  ? 'ring-2 ring-blue-500 shadow-lg'
-                  : ''
-              } border border-gray-300 rounded-lg p-3 sm:p-4`}
-            >
-              <input
-                type="radio"
-                name="selectedMotorcycle"
-                value={bike.name}
-                checked={formData.selectedMotorcycle === bike.name}
-                onChange={handleInputChange}
-                disabled={!bike.available}
-                className="sr-only"
-              />
-              
-              <div className={`bg-white rounded-lg border-2 p-3 sm:p-4 text-center transition-all duration-200 ${
-                formData.selectedMotorcycle === bike.name
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
-              } ${!bike.available ? 'border-gray-100' : ''}`}>
-                
-                {/* Bike Image */}
-                <div className="mb-3">
-                  {bike.image ? (
-                    <img
-                      src={bike.image}
-                      alt={bike.name}
-                      className="w-full h-24 sm:h-32 object-cover rounded-md mx-auto"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                  ) : (
-                    <div className="w-full h-24 sm:h-32 bg-gray-200 rounded-md flex items-center justify-center">
-                      <span className="text-gray-400 text-sm">No Image</span>
+          {bikesLoading ? (
+            <div className="text-center text-gray-600">Loading motorcycles...</div>
+          ) : !motorcycles || motorcycles.length === 0 ? (
+            <div className="text-center text-red-500">No motorcycles available. Please try again later.</div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4">
+              {motorcycles.map((bike, index) => (
+                <label
+                  key={index}
+                  className={`relative cursor-pointer group ${
+                    !bike.available || bike.remaining <= 0
+                      ? 'cursor-not-allowed opacity-50'
+                      : 'hover:shadow-lg transition-shadow duration-200'
+                  } ${
+                    formData.motorcycle.selectedMotorcycle === bike.name
+                      ? 'ring-2 ring-blue-500 shadow-lg'
+                      : ''
+                  } border border-gray-300 rounded-lg p-3 sm:p-4`}
+                >
+                  <input
+                    type="radio"
+                    name="selectedMotorcycle"
+                    value={bike.name}
+                    checked={formData.motorcycle.selectedMotorcycle === bike.name}
+                    onChange={(e) => {
+                      console.log('Step6: selectedMotorcycle changed to:', e.target.value);
+                      handleInputChange(e, 'motorcycle');
+                    }}
+                    disabled={!bike.available || bike.remaining <= 0}
+                    className="sr-only"
+                  />
+                  
+                  <div className={`bg-white rounded-lg border-2 p-3 sm:p-4 text-center transition-all duration-200 ${
+                    formData.motorcycle.selectedMotorcycle === bike.name
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  } ${!bike.available || bike.remaining <= 0 ? 'border-gray-100' : ''}`}>
+                    
+                    {/* Bike Image */}
+                    <div className="mb-3">
+                      {bike.image ? (
+                        <img
+                          src={bike.image}
+                          alt={bike.name}
+                          className="w-full h-24 sm:h-32 object-cover rounded-md mx-auto"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-24 sm:h-32 bg-gray-200 rounded-md flex items-center justify-center">
+                          <span className="text-gray-400 text-sm">No Image</span>
+                        </div>
+                      )}
+                      <div className="w-full h-24 sm:h-32 bg-gray-200 rounded-md flex items-center justify-center hidden">
+                        <span className="text-gray-400 text-sm">Image Failed to Load</span>
+                      </div>
                     </div>
-                  )}
-                </div>
-                
-                {/* Bike Details */}
-                <div className="space-y-1">
-                  {!bike.available ? (
-                    <div className="text-center">
-                      <div className="text-red-500 font-semibold text-xs sm:text-sm mb-1">SOLD OUT</div>
-                      <div className="text-gray-500 text-xs">{bike.name}</div>
+                    
+                    {/* Bike Details */}
+                    <div className="space-y-1">
+                      {!bike.available || bike.remaining <= 0 ? (
+                        <div className="text-center">
+                          <div className="text-red-500 font-semibold text-xs sm:text-sm mb-1">SOLD OUT</div>
+                          <div className="text-gray-500 text-xs">{bike.name}</div>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <div className="text-gray-500 text-xs mb-1">({bike.remaining} remaining)</div>
+                          <div className="font-semibold text-gray-900 text-xs sm:text-sm mb-1 line-clamp-2">{bike.name}</div>
+                          <div className="text-blue-600 font-bold text-xs sm:text-sm">${bike.price}/day</div>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className="text-center">
-                      <div className="text-gray-500 text-xs mb-1">({bike.remaining} remaining)</div>
-                      <div className="font-semibold text-gray-900 text-xs sm:text-sm mb-1 line-clamp-2">{bike.name}</div>
-                      <div className="text-blue-600 font-bold text-xs sm:text-sm">${bike.price}/day</div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </label>
-          ))}
-          </div>
+                  </div>
+                </label>
+              ))}
+            </div>
+          )}
           {errors.selectedMotorcycle && <p className="text-red-500 text-sm mt-2">{errors.selectedMotorcycle}</p>}
         </div>
       )}
 
-      {formData.hireOption === 'Hire a Motorcycle' && (
+      {formData.motorcycle.hireOption === 'Hire a Motorcycle' && (
         <div className="bg-gray-50 border-l-4 border-gray-400 p-4">
           <h4 className="text-lg font-semibold text-gray-800 mb-2">Hire Date:</h4>
           <div className="text-sm text-gray-700">
@@ -472,7 +163,7 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
         </div>
       )}
 
-      {formData.hireOption === 'Use my own motorcycle' && (
+      {formData.motorcycle.hireOption === 'Use my own motorcycle' && (
         <div className="space-y-6">
           <div className="bg-green-50 border-l-4 border-green-400 p-4">
             <h4 className="text-lg font-semibold text-green-800 mb-2">Using Your Own Motorcycle</h4>
@@ -484,9 +175,9 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Bike make *</label>
               <input
                 type="text"
-                name="ownBikeMake"
-                value={formData.ownBikeMake}
-                onChange={handleInputChange}
+                name="make"
+                value={formData.motorcycle.ownBike.make}
+                onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
               />
               {errors.ownBikeMake && <p className="text-red-500 text-sm mt-1">{errors.ownBikeMake}</p>}
@@ -495,9 +186,9 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Bike model *</label>
               <input
                 type="text"
-                name="ownBikeModel"
-                value={formData.ownBikeModel}
-                onChange={handleInputChange}
+                name="model"
+                value={formData.motorcycle.ownBike.model}
+                onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
               />
               {errors.ownBikeModel && <p className="text-red-500 text-sm mt-1">{errors.ownBikeModel}</p>}
@@ -506,9 +197,9 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Bike year *</label>
               <input
                 type="number"
-                name="ownBikeYear"
-                value={formData.ownBikeYear}
-                onChange={handleInputChange}
+                name="year"
+                value={formData.motorcycle.ownBike.year}
+                onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
               />
               {errors.ownBikeYear && <p className="text-red-500 text-sm mt-1">{errors.ownBikeYear}</p>}
@@ -517,9 +208,9 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Registration number *</label>
               <input
                 type="text"
-                name="ownBikeRegistrationNumber"
-                value={formData.ownBikeRegistrationNumber}
-                onChange={handleInputChange}
+                name="registrationNumber"
+                value={formData.motorcycle.ownBike.registrationNumber}
+                onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
               />
               {errors.ownBikeRegistrationNumber && <p className="text-red-500 text-sm mt-1">{errors.ownBikeRegistrationNumber}</p>}
@@ -527,9 +218,9 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">State/Region *</label>
               <select
-                name="ownBikeStateOrRegion"
-                value={formData.ownBikeStateOrRegion}
-                onChange={handleInputChange}
+                name="stateOrRegion"
+                value={formData.motorcycle.ownBike.stateOrRegion}
+                onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
               >
                 <option value="">Select your state/region</option>
@@ -556,9 +247,9 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Current odometer reading *</label>
               <input
                 type="number"
-                name="ownBikeOdometer"
-                value={formData.ownBikeOdometer}
-                onChange={handleInputChange}
+                name="odometer"
+                value={formData.motorcycle.ownBike.odometer}
+                onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
               />
               {errors.ownBikeOdometer && <p className="text-red-500 text-sm mt-1">{errors.ownBikeOdometer}</p>}
@@ -569,24 +260,56 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">Is your motorcycle service schedule currently up to date? *</label>
             <div className="flex gap-4">
               <label className="flex items-center">
-                <input type="radio" name="ownBikeServiceUpToDate" value="Yes" checked={formData.ownBikeServiceUpToDate === 'Yes'} onChange={handleInputChange} className="mr-2" /> Yes
+                <input
+                  type="radio"
+                  name="serviceUpToDate"
+                  value="Yes"
+                  checked={formData.motorcycle.ownBike.serviceUpToDate === 'Yes'}
+                  onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
+                  className="mr-2 focus:ring-green-500"
+                />
+                Yes
               </label>
               <label className="flex items-center">
-                <input type="radio" name="ownBikeServiceUpToDate" value="No" checked={formData.ownBikeServiceUpToDate === 'No'} onChange={handleInputChange} className="mr-2" /> No
+                <input
+                  type="radio"
+                  name="serviceUpToDate"
+                  value="No"
+                  checked={formData.motorcycle.ownBike.serviceUpToDate === 'No'}
+                  onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
+                  className="mr-2 focus:ring-green-500"
+                />
+                No
               </label>
             </div>
             {errors.ownBikeServiceUpToDate && <p className="text-red-500 text-sm mt-1">{errors.ownBikeServiceUpToDate}</p>}
           </div>
 
-          {formData.ownBikeServiceUpToDate === 'No' && (
+          {formData.motorcycle.ownBike.serviceUpToDate === 'No' && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Will you ensure your bike is serviced in preparation for the adventure? *</label>
               <div className="flex gap-4">
                 <label className="flex items-center">
-                  <input type="radio" name="ownBikeServiceIntention" value="Yes" checked={formData.ownBikeServiceIntention === 'Yes'} onChange={handleInputChange} className="mr-2" /> Yes
+                  <input
+                    type="radio"
+                    name="serviceIntention"
+                    value="Yes"
+                    checked={formData.motorcycle.ownBike.serviceIntention === 'Yes'}
+                    onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
+                    className="mr-2 focus:ring-green-500"
+                  />
+                  Yes
                 </label>
                 <label className="flex items-center">
-                  <input type="radio" name="ownBikeServiceIntention" value="No" checked={formData.ownBikeServiceIntention === 'No'} onChange={handleInputChange} className="mr-2" /> No
+                  <input
+                    type="radio"
+                    name="serviceIntention"
+                    value="No"
+                    checked={formData.motorcycle.ownBike.serviceIntention === 'No'}
+                    onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
+                    className="mr-2 focus:ring-green-500"
+                  />
+                  No
                 </label>
               </div>
               {errors.ownBikeServiceIntention && <p className="text-red-500 text-sm mt-1">{errors.ownBikeServiceIntention}</p>}
@@ -597,22 +320,38 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">Does your bike have any unresolved mechanical issues? *</label>
             <div className="flex gap-4">
               <label className="flex items-center">
-                <input type="radio" name="ownBikeHasUnresolvedIssues" value="Yes" checked={formData.ownBikeHasUnresolvedIssues === 'Yes'} onChange={handleInputChange} className="mr-2" /> Yes
+                <input
+                  type="radio"
+                  name="hasUnresolvedIssues"
+                  value="Yes"
+                  checked={formData.motorcycle.ownBike.hasUnresolvedIssues === 'Yes'}
+                  onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
+                  className="mr-2 focus:ring-green-500"
+                />
+                Yes
               </label>
               <label className="flex items-center">
-                <input type="radio" name="ownBikeHasUnresolvedIssues" value="No" checked={formData.ownBikeHasUnresolvedIssues === 'No'} onChange={handleInputChange} className="mr-2" /> No
+                <input
+                  type="radio"
+                  name="hasUnresolvedIssues"
+                  value="No"
+                  checked={formData.motorcycle.ownBike.hasUnresolvedIssues === 'No'}
+                  onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
+                  className="mr-2 focus:ring-green-500"
+                />
+                No
               </label>
             </div>
             {errors.ownBikeHasUnresolvedIssues && <p className="text-red-500 text-sm mt-1">{errors.ownBikeHasUnresolvedIssues}</p>}
           </div>
 
-          {formData.ownBikeHasUnresolvedIssues === 'Yes' && (
+          {formData.motorcycle.ownBike.hasUnresolvedIssues === 'Yes' && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">If yes, please explain *</label>
               <textarea
-                name="ownBikeIssuesDetails"
-                value={formData.ownBikeIssuesDetails}
-                onChange={handleInputChange}
+                name="issuesDetails"
+                value={formData.motorcycle.ownBike.issuesDetails}
+                onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 rows={4}
               />
@@ -624,10 +363,26 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">Does your motorcycle have full comprehensive insurance? *</label>
             <div className="flex gap-4">
               <label className="flex items-center">
-                <input type="radio" name="ownBikeHasComprehensiveInsurance" value="Yes" checked={formData.ownBikeHasComprehensiveInsurance === 'Yes'} onChange={handleInputChange} className="mr-2" /> Yes
+                <input
+                  type="radio"
+                  name="hasComprehensiveInsurance"
+                  value="Yes"
+                  checked={formData.motorcycle.ownBike.hasComprehensiveInsurance === 'Yes'}
+                  onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
+                  className="mr-2 focus:ring-green-500"
+                />
+                Yes
               </label>
               <label className="flex items-center">
-                <input type="radio" name="ownBikeHasComprehensiveInsurance" value="No" checked={formData.ownBikeHasComprehensiveInsurance === 'No'} onChange={handleInputChange} className="mr-2" /> No
+                <input
+                  type="radio"
+                  name="hasComprehensiveInsurance"
+                  value="No"
+                  checked={formData.motorcycle.ownBike.hasComprehensiveInsurance === 'No'}
+                  onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
+                  className="mr-2 focus:ring-green-500"
+                />
+                No
               </label>
             </div>
             {errors.ownBikeHasComprehensiveInsurance && <p className="text-red-500 text-sm mt-1">{errors.ownBikeHasComprehensiveInsurance}</p>}
@@ -637,9 +392,9 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Fuel capacity *</label>
               <select
-                name="ownBikeFuelCapacity"
-                value={formData.ownBikeFuelCapacity}
-                onChange={handleInputChange}
+                name="fuelCapacity"
+                value={formData.motorcycle.ownBike.fuelCapacity}
+                onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
               >
                 <option value="">Select capacity</option>
@@ -654,9 +409,9 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Estimated full fuel range *</label>
               <select
-                name="ownBikeEstimatedRange"
-                value={formData.ownBikeEstimatedRange}
-                onChange={handleInputChange}
+                name="estimatedRange"
+                value={formData.motorcycle.ownBike.estimatedRange}
+                onChange={(e) => handleInputChange(e, 'motorcycle.ownBike')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
               >
                 <option value="">Select fuel range</option>
@@ -672,20 +427,25 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
         </div>
       )}
 
-      {/* Selected Bike Image and Specifications */}
-      {formData.hireOption === 'Hire a Motorcycle' && getSelectedBikeImage() && (
+      {formData.motorcycle.hireOption === 'Hire a Motorcycle' && getSelectedBikeImage() && !bikesLoading && (
         <div className="mt-8">
           <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">Selected Motorcycle</h4>
           <div className="flex justify-center">
             <img
               src={getSelectedBikeImage()}
-              alt={formData.selectedMotorcycle}
+              alt={formData.motorcycle.selectedMotorcycle}
               className="max-w-full h-auto max-h-96 object-contain rounded-lg shadow-lg"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
             />
+            <div className="w-full max-w-md h-96 bg-gray-200 rounded-lg flex items-center justify-center hidden">
+              <span className="text-gray-400 text-sm">Image Failed to Load</span>
+            </div>
           </div>
-          <p className="text-center text-gray-600 mt-2 font-medium">{formData.selectedMotorcycle}</p>
+          <p className="text-center text-gray-600 mt-2 font-medium">{formData.motorcycle.selectedMotorcycle}</p>
           
-          {/* Bike Specifications */}
           {getSelectedBikeSpecs() && (
             <div className="mt-4 sm:mt-6 bg-gray-50 rounded-lg p-4 sm:p-6">
               <h5 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4 text-center">Specifications</h5>
@@ -738,19 +498,15 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
                 </div>
               </div>
               
-              {/* Daily Rate and Hire Date */}
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="text-center">
                     <h6 className="text-lg font-semibold text-blue-800 mb-2">Daily Rate</h6>
-                    <p className="text-2xl font-bold text-blue-900">${motorcycles.find(bike => bike.name === formData.selectedMotorcycle)?.price}/day</p>
+                    <p className="text-2xl font-bold text-blue-900">${motorcycles.find(bike => bike.name === formData.motorcycle.selectedMotorcycle)?.price}/day</p>
                   </div>
-                  <div className="mt-4 pt-4 border-t border-blue-200">
-                    <h6 className="text-lg font-semibold text-blue-800 mb-2">Hire Date:</h6>
-                    <div className="text-sm text-blue-700">
-                      <p><strong>Collect on:</strong> 8th November 2025</p>
-                      <p><strong>Return on:</strong> 15th November 2025</p>
-                    </div>
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <p className="text-sm text-gray-700"><strong>Collect on:</strong> 8th November 2025</p>
+                    <p className="text-sm text-gray-700"><strong>Return on:</strong> 15th November 2025</p>
                   </div>
                 </div>
               </div>
