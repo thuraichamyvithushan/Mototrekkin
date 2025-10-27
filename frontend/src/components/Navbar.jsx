@@ -231,7 +231,7 @@ export default function Navbar({ onUserClick }) {
 
                   <NavLink
                     to={user.role === "admin" ? "/admin/dashboard" : "/userdashboard"}
-                    className="block w-full text-center py-1 mb-2 bg-blue-600 rounded hover:bg-blue-700"
+                    className="block w-full text-center py-1 mb-2 bg-yellow-600 rounded hover:bg-yellow-700"
                     onClick={() => setProfileOpen(false)}
                   >
                     {user.role === "admin" ? "Admin Panel" : "User Panel"}

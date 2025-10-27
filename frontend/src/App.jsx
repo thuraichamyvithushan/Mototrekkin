@@ -205,7 +205,7 @@ const AppContent = () => {
         /> */}
         <Route
           path="/registration-mdp-phase-3"
-          element={<MDPPhase2Registration />}
+          element={<ProtectedRoute element={<MDPPhase2Registration />}requiredRole="user" />}
         />
         {/* <Route
           path="/registration-mdp-phase-3"

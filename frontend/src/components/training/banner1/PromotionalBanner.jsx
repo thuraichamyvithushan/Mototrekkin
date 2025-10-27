@@ -13,13 +13,21 @@ const PromotionalBanner = () => {
               <span className="text-gray-600">available to Australian Adventure Riders</span>
             </p>
           </div>
-          <div className="flex-shrink-0">
+          {/* <div className="flex-shrink-0">
             <Link 
               to="/registration"
               className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
             >
               REGISTER HERE
             </Link>
+          </div> */}
+          <div className="flex-shrink-0">
+            <a 
+              href="#calender"
+              className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+            >
+              REGISTER HERE
+            </a>
           </div>
         </div>
       </div>

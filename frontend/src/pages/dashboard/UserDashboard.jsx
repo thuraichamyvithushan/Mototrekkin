@@ -59,7 +59,7 @@ const UserDashboard = () => {
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
       <aside className="w-64 bg-white border-r">
         <div className="p-6 flex flex-col items-center">
-          <h2 className="font-semibold text-lg mb-2">{user?.fullName || "User"}</h2>
+          <h2 className="font-semibold text-lg mb-2">{user?.fullName || user?.email}</h2>
           <button
             onClick={handleLogout}
             className="bg-red-500 text-white px-4 py-1 rounded"

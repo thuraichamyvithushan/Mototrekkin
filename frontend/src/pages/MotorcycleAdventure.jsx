@@ -19,7 +19,7 @@ const MotorcycleAdventure = () => {
       <AdventuresGallery />
       <AdventuresContact />
 
-      <section>
+      {/* <section>
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 ">
           <Link to="/event-calendar-2025" className="group">
             <div className="relative overflow-hidden ">
@@ -64,7 +64,7 @@ const MotorcycleAdventure = () => {
       />
     </div>
   </div>
-</section>
+</section> */}
     </>
   );
 };

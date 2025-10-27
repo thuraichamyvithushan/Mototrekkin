@@ -40,6 +40,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 // Routes
+
 app.use("/api/bookings", bookingRoutes); // For general service bookings
 app.use("/api/bikeBookings", bikeBookingRoutes); // For bike hire bookings
 app.use("/api/auth", authRoutes);

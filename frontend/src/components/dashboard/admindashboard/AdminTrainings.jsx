@@ -238,8 +238,18 @@ const AdminTrainings = () => {
                         </div>
                       </td>
                       <td className="py-4 px-6 whitespace-nowrap text-sm text-gray-900">
-                        {reg.personalDetails.email}
-                      </td>
+  {reg.personalDetails?.email ? (
+    <a
+      href={`mailto:${reg.personalDetails.email}`}
+      className="text-blue-600 hover:underline"
+    >
+      {reg.personalDetails.email}
+    </a>
+  ) : (
+    "N/A"
+  )}
+</td>
+
                       <td className="py-4 px-6 whitespace-nowrap">
                         <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                           {reg.trainingState || '—'}

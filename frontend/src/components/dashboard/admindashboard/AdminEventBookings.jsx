@@ -165,7 +165,19 @@ const AdminEventsNZSIRegistration = () => {
                 {registrations.map(reg => (
                   <tr key={reg._id} className="hover:bg-gray-50">
                     <td className="py-4 px-6">{`${reg.personalDetails?.firstName} ${reg.personalDetails?.lastName}`}</td>
-                    <td className="py-4 px-6 text-sm">{reg.personalDetails?.email}</td>
+                 <td className="py-4 px-6 text-sm">
+  {reg.personalDetails?.email ? (
+    <a
+      href={`mailto:${reg.personalDetails.email}`}
+      className="text-blue-600 hover:underline"
+    >
+      {reg.personalDetails.email}
+    </a>
+  ) : (
+    "N/A"
+  )}
+</td>
+
                     <td className="py-4 px-6">
                       <span className="inline-flex px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
                         {reg.accommodation?.accommodationPreference || '—'}
