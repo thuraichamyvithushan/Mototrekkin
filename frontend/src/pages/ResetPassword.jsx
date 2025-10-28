@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import API from "../api";
+
 
 const ResetPassword = () => {
   const { token } = useParams(); 
@@ -9,7 +11,9 @@ const ResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const BASE_URL = "http://localhost:5000/api/auth";
+  // const BASE_URL = "http://localhost:5000/api/auth";
+    const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth`;
+
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
