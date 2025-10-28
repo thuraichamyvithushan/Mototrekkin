@@ -32,7 +32,14 @@ console.log("Environment variables:", {
 });
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://mototrekkin.vercel.app", "http://localhost:5173"], // Add your frontends
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
+ 
 app.use(express.json());
 app.use(express.raw({ type: "application/json" })); // For Stripe webhook
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
