@@ -116,7 +116,7 @@ import EarMoldBooking from './pages/EarMoldBooking';
 import TrainingPage from './pages/TrainingPage';
 import OffRoadTrainingDetailPage from './pages/OffRoadTrainingDetailPage';
 
-import ServicesPage from './pages/servicesnpm run clean';
+import ServicesPage from './pages/services';
 import ServiceBookingForm from './components/serviceBookingForm';
 import UserDashboard from './pages/dashboard/UserDashboard';
 import AdminDashboard from './pages/dashboard/AdminDashboard';
