@@ -4,18 +4,15 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
-import { stripe } from "./controllers/bikeBookingController.js"; // Import Stripe instance
-import bookingRoutes from "./routes/bookingRoutes.js"; // For service bookings
-import bikeBookingRoutes from "./routes/bikeBookingRoutes.js"; // For bike hire bookings
+import { stripe } from "./controllers/bikeBookingController.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
+import bikeBookingRoutes from "./routes/bikeBookingRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-import BikeBooking from "./models/BikeBooking.js"; // Import for webhook
-// import bikeRoutes from "./routes/bikeRoutes.js";
-
+import BikeBooking from "./models/BikeBooking.js";
 import nzsiRegistrationRoutes from './routes/nzsiRegistration.js';
 
 dotenv.config();
 
-// Recreate __filename and __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -30,20 +27,35 @@ console.log("Environment variables:", {
 });
 
 const app = express();
-app.use(cors());
+
+// ----- CORS CONFIGURATION -----
+const allowedOrigins = [
+  "http://localhost:5173", // local frontend
+  "https://mototrekkin-djyk.vercel.app" // deployed frontend
+];
+
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true); // allow server-to-server requests
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = `CORS policy: The origin ${origin} is not allowed.`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true // allow cookies if needed
+}));
+
+// ----- MIDDLEWARE -----
 app.use(express.json());
-app.use(express.raw({ type: "application/json" })); // For Stripe webhook
+app.use(express.raw({ type: "application/json" })); // for Stripe webhook
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Routes
-app.use("/api/bookings", bookingRoutes); // For general service bookings
-app.use("/api/bikeBookings", bikeBookingRoutes); // For bike hire bookings
+// ----- ROUTES -----
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/bikeBookings", bikeBookingRoutes);
 app.use("/api/auth", authRoutes);
-
 app.use('/api/nzsiRegistrations', nzsiRegistrationRoutes);
-app.use('/api/nzsiRegistrations/user/:userId', nzsiRegistrationRoutes);
-
-// app.use("/api/bikes", bikeRoutes);
 
 // Stripe webhook
 app.post("/api/webhook", (req, res) => {
@@ -73,7 +85,7 @@ app.post("/api/webhook", (req, res) => {
   res.json({ received: true });
 });
 
-// Connect to MongoDB
+// ----- DATABASE CONNECTION -----
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -82,12 +94,13 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.error("MongoDB Error:", err));
 
-// Error handling middleware
+// ----- ERROR HANDLING -----
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong!" });
+  res.status(500).json({ message: err.message || "Something went wrong!" });
 });
 
+// ----- TEST ROUTE -----
 app.get("/", (req, res) => {
   res.send("Hello from Backend!");
 });
