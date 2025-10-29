@@ -16,6 +16,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Log environment variables
 console.log("Environment variables:", {
   MONGO_URI: process.env.MONGO_URI ? "Set" : "Missing",
   PORT: process.env.PORT,
@@ -34,17 +35,25 @@ const allowedOrigins = [
   "https://mototrekkin-djyk.vercel.app" // deployed frontend
 ];
 
-app.use(cors({
+const corsOptions = {
   origin: function(origin, callback){
-    if(!origin) return callback(null, true); // allow server-to-server requests
+    if(!origin) return callback(null, true); // server-to-server requests
     if(allowedOrigins.indexOf(origin) === -1){
       const msg = `CORS policy: The origin ${origin} is not allowed.`;
       return callback(new Error(msg), false);
     }
     return callback(null, true);
   },
-  credentials: true // allow cookies if needed
-}));
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+};
+
+// Apply CORS globally
+app.use(cors(corsOptions));
+
+// Handle OPTIONS preflight requests
+app.options("*", cors(corsOptions));
 
 // ----- MIDDLEWARE -----
 app.use(express.json());
