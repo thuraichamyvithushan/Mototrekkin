@@ -30,8 +30,10 @@ const ServiceBookingForm = () => {
 
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    firstName: user?.fullName?.split(" ")[0] || "",
-    lastName: user?.fullName?.split(" ").slice(1).join(" ") || "",
+    // firstName: user?.fullName?.split(" ")[0] || "",
+    // lastName: user?.fullName?.split(" ").slice(1).join(" ") || "",
+    firstName:"",
+    lastName:"",
     email: user?.email || "",
     mobileNumber: "",
     workPhone: "",
@@ -92,12 +94,20 @@ const handleSubmit = async (e) => {
       regoExpiry: formData.regoExpiry ? new Date(formData.regoExpiry) : null,
       currentKms: formData.currentKms ? Number(formData.currentKms) : undefined,
     };
-
+  
     console.log("ServiceBookingForm: Submitting booking", { userId: user?.id, payload });
+      
+  
+    const BASE_URL =
+    window.location.hostname === "localhost"
+    ? "http://localhost:5000/api"
+    : "https://mototrekkin-djyk.vercel.app/api";
 
-    const response = await axios.post("http://localhost:5000/api/bookings", payload, {
-      headers: { "Content-Type": "application/json" },
-    });
+    
+    const response = await axios.post(`${BASE_URL}/bookings`, payload, {
+  headers: { "Content-Type": "application/json" },
+});
+
 
     console.log("ServiceBookingForm: Booking submitted successfully", response.data);
 
@@ -251,8 +261,8 @@ const handleSubmit = async (e) => {
             <h3 className="text-xl font-semibold">PERSONAL DETAILS</h3>
             <hr className="border-t border-gray-300 mt-2 mb-10" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {renderInput("First Name", "firstName", "text", true, true)}
-              {renderInput("Last Name", "lastName", "text", true, true)}
+              {renderInput("First Name", "firstName", "text", true)}
+              {renderInput("Last Name", "lastName", "text",  true)}
             </div>
             <div className="w-full">{renderInput("Email", "email", "email", true, true)}</div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
