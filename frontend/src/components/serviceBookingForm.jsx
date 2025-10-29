@@ -101,7 +101,7 @@ const handleSubmit = async (e) => {
     const BASE_URL =
     window.location.hostname === "localhost"
     ? "http://localhost:5000/api"
-    : "https://mototrekkin-djyk.vercel.app/api";
+    : "https://mototrekkin.vercel.app/api";
 
     
     const response = await axios.post(`${BASE_URL}/bookings`, payload, {
