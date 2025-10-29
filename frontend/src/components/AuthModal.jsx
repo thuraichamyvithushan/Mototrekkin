@@ -17,10 +17,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-const BASE_URL = import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL_LOCAL;
-
-// Forgot password example
-axios.post(`${BASE_URL}/auth/forgot-password`, { email });
+  const BASE_URL = "http://localhost:5000/api/auth";
 
   if (!isOpen) return null;
 
