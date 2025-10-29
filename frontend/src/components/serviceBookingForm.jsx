@@ -259,8 +259,8 @@ const handleSubmit = async (e) => {
             <h3 className="text-xl font-semibold">PERSONAL DETAILS</h3>
             <hr className="border-t border-gray-300 mt-2 mb-10" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {renderInput("First Name", "firstName", "text", true, true)}
-              {renderInput("Last Name", "lastName", "text", true, true)}
+              {renderInput("First Name", "firstName", "text", true)}
+              {renderInput("Last Name", "lastName", "text", true)}
             </div>
             <div className="w-full">{renderInput("Email", "email", "email", true, true)}</div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
