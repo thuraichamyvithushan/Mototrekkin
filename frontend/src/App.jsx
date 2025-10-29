@@ -20,7 +20,7 @@ import EarMoldBooking from './pages/EarMoldBooking';
 import TrainingPage from './pages/TrainingPage';
 import OffRoadTrainingDetailPage from './pages/OffRoadTrainingDetailPage';
 // import RegistrationPage from './pages/RegistrationPage';
-import ServicesPage from './pages/Services';
+import ServicesPage from './pages/services';
 import ServiceBookingForm from './components/serviceBookingForm';
 import UserDashboard from './pages/dashboard/UserDashboard';
 import AdminDashboard from './pages/dashboard/AdminDashboard';
