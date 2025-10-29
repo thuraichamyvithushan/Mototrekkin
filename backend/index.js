@@ -34,7 +34,7 @@ const app = express();
 // Dynamic CORS setup
 const allowedOrigins = [
   "http://localhost:5174", 
-  "https://mototrekkin-djyk.vercel.app/" 
+  "https://mototrekkin-djyk.vercel.app" 
 ];
 
 app.use(
