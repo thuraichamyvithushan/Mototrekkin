@@ -17,7 +17,11 @@ const AuthModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const BASE_URL = "http://localhost:5000/api/auth";
+const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000/api/auth"
+    : "https://mototrekkin-djyk.vercel.app/api/auth";
+
 
   if (!isOpen) return null;
 
