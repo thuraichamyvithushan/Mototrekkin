@@ -1,3 +1,4 @@
+
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import authimg from "../assets/login-sideimage.webp";
@@ -16,8 +17,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // const BASE_URL = "http://localhost:5000/api/auth";
-      const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth`;
+  const BASE_URL = "http://localhost:5000/api/auth";
 
   if (!isOpen) return null;
 

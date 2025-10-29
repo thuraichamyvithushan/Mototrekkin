@@ -9,11 +9,9 @@ import bookingRoutes from "./routes/bookingRoutes.js"; // For service bookings
 import bikeBookingRoutes from "./routes/bikeBookingRoutes.js"; // For bike hire bookings
 import authRoutes from "./routes/authRoutes.js";
 import BikeBooking from "./models/BikeBooking.js"; // Import for webhook
+// import bikeRoutes from "./routes/bikeRoutes.js";
 
 import nzsiRegistrationRoutes from './routes/nzsiRegistration.js';
-import mdpPhase2Routes from './routes/mdpPhase2Routes.js';
-import MDPPhase2Registration from './models/MDPPhase2Registration.js';
-import mdpPhase2BikesRouter from './routes/mdpPhase2Bikes.js'; // Added import
 
 dotenv.config();
 
@@ -32,22 +30,12 @@ console.log("Environment variables:", {
 });
 
 const app = express();
-app.use(
-  cors({
-    origin: ["https://mototrekkin.vercel.app", "http://localhost:5173"], // Add your frontends
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
-  })
-);
- 
+app.use(cors());
 app.use(express.json());
 app.use(express.raw({ type: "application/json" })); // For Stripe webhook
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-// Optional: Serve bike images from backend if not using frontend public directory
-app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 // Routes
-
 app.use("/api/bookings", bookingRoutes); // For general service bookings
 app.use("/api/bikeBookings", bikeBookingRoutes); // For bike hire bookings
 app.use("/api/auth", authRoutes);
@@ -55,8 +43,7 @@ app.use("/api/auth", authRoutes);
 app.use('/api/nzsiRegistrations', nzsiRegistrationRoutes);
 app.use('/api/nzsiRegistrations/user/:userId', nzsiRegistrationRoutes);
 
-app.use('/api/mdpPhase2Registrations', mdpPhase2Routes);
-app.use('/api/bikes', mdpPhase2BikesRouter);
+// app.use("/api/bikes", bikeRoutes);
 
 // Stripe webhook
 app.post("/api/webhook", (req, res) => {
