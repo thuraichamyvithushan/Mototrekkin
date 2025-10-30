@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 import axios from "../../axiosConfig"; // Use the configured axios instance
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,10 +12,14 @@ import imgCb500x from "../../assets/bikes/HONDA CB500X.jpg";
 
 const stripePromise = loadStripe("pk_live_6C7fzU00LNNJoD74Cg1AjFeH00bxXpAZGj");
 
+
 const BikeBookingForm = () => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
+   const [bikes, setBikes] = useState([]);
+// const [loading, setLoading] = useState(true);
+const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     // Step 1: Dates
@@ -159,7 +163,9 @@ const BikeBookingForm = () => {
 
     setFormData(updated);
   };
+  
 
+  
   // Navigation
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrev = () => setStep((prev) => prev - 1);
@@ -412,7 +418,21 @@ const BikeBookingForm = () => {
     }
   };
 
-  // Button Style
+ useEffect(() => {
+       const fetchBikes = async () => {
+          try {
+            const res = await axios.get("http://localhost:5000/api/bikehires");
+               setBikes(res.data);
+           } catch (err) {
+               setError("Failed to load bikes");
+           } finally {
+               setLoading(false);
+           }
+             };
+               fetchBikes();
+           }, []);
+
+// Button Style
   const getButtonClass = (enabled) =>
     `px-6 py-2 rounded ${
       enabled ? "bg-[#edab1a] text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -527,233 +547,259 @@ const BikeBookingForm = () => {
           </div>
         )}
 
-        {/* Step 2: Bike & Gear */}
-        {step === 2 && (
-          <div className="space-y-6 px-4 sm:px-6 lg:px-8">
-            <h3 className="text-2xl font-bold text-gray-800">Choose Bike & Gear</h3>
-            <hr className="border-t border-gray-300" />
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {[
-                {
-                  id: 1,
-                  name: "CRF250 RALLY",
-                  price: 205,
-                  available: true,
-                  remaining: 1,
-                  img: imgCrf250,
-                  specs: { engine: "250cc Liquid-cooled", weight: "155 kg", fuel: "10.1 L" },
-                },
-                {
-                  id: 2,
-                  name: "BMW G310 GS",
-                  price: 215,
-                  available: false,
-                  remaining: 0,
-                  img: imgBmw310,
-                  specs: { engine: "649cc Parallel Twin", weight: "216 kg", fuel: "21 L" },
-                },
-                {
-                  id: 3,
-                  name: "HONDA CB500X",
-                  price: 230,
-                  available: true,
-                  remaining: 1,
-                  img: imgCb500x,
-                  specs: { engine: "471cc Parallel Twin", weight: "197 kg", fuel: "17.7 L" },
-                },
-              ].map((bike) => (
-                <div
-                  key={bike.id}
-                  className={`border-2 rounded-xl p-4 cursor-pointer shadow-md transition duration-300 ease-in-out hover:shadow-lg ${
-                    formData.bikeModel === bike.name ? "border-yellow-500 bg-yellow-50" : "border-gray-200"
-                  } ${!bike.available ? "opacity-60 cursor-not-allowed bg-gray-100" : ""}`}
-                  onClick={() =>
-                    bike.available &&
-                    setFormData((prev) => ({
-                      ...prev,
-                      bikeModel: bike.name,
-                      bikePrice: bike.price,
-                      bikeSpecs: bike.specs,
-                      bikeImg: bike.img,
-                    }))
-                  }
-                >
-                  <img
-                    src={bike.img}
-                    alt={bike.name}
-                    className="w-full h-32 sm:h-40 object-cover rounded-lg mb-3"
-                  />
-                  <h4 className="text-lg font-bold text-gray-800 truncate">{bike.name}</h4>
-                  <p className={`text-xs ${bike.available ? "text-green-600" : "text-red-500"} font-medium mt-1`}>
-                    {bike.available ? `(${bike.remaining} remaining)` : "SOLD OUT"}
-                  </p>
-                  <p className="text-xl font-extrabold text-blue-600 mt-2">${bike.price}<span className="text-sm font-normal text-gray-500">/day</span></p>
-                </div>
-              ))}
-            </div>
 
-            {formData.bikeModel && (
-              <div className="flex flex-col md:flex-row mt-8 p-4 border rounded-xl shadow-lg bg-white gap-6 items-center md:items-start">
-                <img
-                  src={formData.bikeImg}
-                  alt={formData.bikeModel}
-                  className="w-full md:w-1/3 h-auto md:h-48 object-cover rounded-lg shadow-md"
-                />
-                <div className="w-full md:w-2/3">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Selected Bike</h3>
-                  <p className="text-lg font-semibold text-gray-700 mb-3">
-                    {formData.bikeModel} - <span className="text-blue-600">${formData.bikePrice}/day</span>
-                  </p>
-                  <h4 className="text-md font-semibold text-gray-600 mb-1">Key Specifications:</h4>
-                  <ul className="list-disc ml-6 space-y-1 text-sm text-gray-700">
-                    <li>Engine: <span className="font-medium">{formData.bikeSpecs?.engine}</span></li>
-                    <li>Weight: <span className="font-medium">{formData.bikeSpecs?.weight}</span></li>
-                    <li>Fuel Capacity: <span className="font-medium">{formData.bikeSpecs?.fuel}</span></li>
-                  </ul>
-                </div>
-              </div>
-            )}
+{/* Step 2: Bike & Gear */}
+{step === 2 && (
+  <div className="space-y-6 px-4 sm:px-6 lg:px-8">
+    <h3 className="text-2xl font-bold text-gray-800">Choose Bike & Gear</h3>
+    <hr className="border-t border-gray-300" />
 
-            <h4 className="text-xl font-bold mt-8 text-gray-800">Choose to Hire Gear</h4>
-            <div className="space-y-4">
-              <label className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 transition duration-150">
-                <input
-                  type="radio"
-                  name="gearOption"
-                  value="Bike hire only"
-                  checked={formData.gearOption === "Bike hire only"}
-                  onChange={handleChange}
-                  className="form-radio h-5 w-5 text-yellow-500"
-                />
-                <span className="text-base font-medium">Bike hire only</span>
-              </label>
-              <label className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 transition duration-150">
-                <input
-                  type="radio"
-                  name="gearOption"
-                  value="Bike hire + gear"
-                  checked={formData.gearOption === "Bike hire + gear"}
-                  onChange={handleChange}
-                  className="form-radio h-5 w-5 text-yellow-500"
-                />
-                <span className="text-base font-medium">Bike hire + gear</span>
-              </label>
-            </div>
+  
+    {loading ? (
+      <p className="text-center text-gray-500">Loading bikes...</p>
+    ) : error ? (
+      <p className="text-center text-red-500">{error}</p>
+    ) : (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {bikes.map((bike) => (
+          <div
+            key={bike._id}
+            className={`border-2 rounded-xl p-4 cursor-pointer shadow-md transition duration-300 ease-in-out hover:shadow-lg ${
+              formData.bikeModel === bike.name
+                ? "border-yellow-500 bg-yellow-50"
+                : "border-gray-200"
+            } ${!bike.available ? "opacity-60 cursor-not-allowed bg-gray-100" : ""}`}
+            onClick={() =>
+              bike.available &&
+              setFormData((prev) => ({
+                ...prev,
+                bikeModel: bike.name,
+                bikePrice: bike.price,
+                bikeSpecs: bike.specs,
+                bikeImg: bike.image?.url || bike.image,
+              }))
+            }
+          >
+           <img
+  src={`http://localhost:5000${bike.image}`}
+  alt={bike.name}
+  className="w-full h-32 sm:h-40 object-cover rounded-lg mb-3"
+/>
+            <h4 className="text-lg font-bold text-gray-800 truncate">{bike.name}</h4>
+            <p
+              className={`text-xs ${
+                bike.available ? "text-green-600" : "text-red-500"
+              } font-medium mt-1`}
+            >
+              {bike.available
+                ? `(${bike.remaining} remaining)`
+                : "SOLD OUT"}
+            </p>
+            <p className="text-xl font-extrabold text-blue-600 mt-2">
+              ${bike.price}
+              <span className="text-sm font-normal text-gray-500">/day</span>
+            </p>
+          </div>
+        ))}
+      </div>
+    )}
 
-            {formData.gearOption === "Bike hire + gear" && (
-              <div className="ml-0 sm:ml-6 mt-4 space-y-4 p-4 border rounded-lg bg-yellow-50">
-                <h5 className="font-semibold text-gray-700">Gear Rental Option:</h5>
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="radio"
-                    name="subGearOption"
-                    value="Package Option - $100/day"
-                    checked={formData.subGearOption === "Package Option - $100/day"}
-                    onChange={handleChange}
-                    className="form-radio h-4 w-4 text-yellow-500"
-                  />
-                  <span className="text-sm sm:text-base">Package Option - <span className="font-semibold text-green-600">$100/day</span> (Helmet, Jacket, Gloves)</span>
-                </label>
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="radio"
-                    name="subGearOption"
-                    value="Individually"
-                    checked={formData.subGearOption === "Individually"}
-                    onChange={handleChange}
-                    className="form-radio h-4 w-4 text-yellow-500"
-                  />
-                  <span className="text-sm sm:text-base">Individually</span>
-                </label>
+   
+    {formData.bikeModel && (
+      <div className="flex flex-col md:flex-row mt-8 p-4 border rounded-xl shadow-lg bg-white gap-6 items-center md:items-start">
+        <img
+          src={`http://localhost:5000${formData.Img}`}
+          alt={formData.bikeModel}
+          className="w-full md:w-1/3 h-auto md:h-48 object-cover rounded-lg shadow-md"
+        />
+        <div className="w-full md:w-2/3">
+          <h3 className="text-xl font-bold text-gray-800 mb-2">Selected Bike</h3>
+          <p className="text-lg font-semibold text-gray-700 mb-3">
+            {formData.bikeModel} -{" "}
+            <span className="text-blue-600">${formData.bikePrice}/day</span>
+          </p>
+          <h4 className="text-md font-semibold text-gray-600 mb-1">
+            Key Specifications:
+          </h4>
+          <ul className="list-disc ml-6 space-y-1 text-sm text-gray-700">
+            <li>
+              Engine:{" "}
+              <span className="font-medium">{formData.bikeSpecs?.engine}</span>
+            </li>
+            <li>
+              Weight:{" "}
+              <span className="font-medium">{formData.bikeSpecs?.weight}</span>
+            </li>
+            <li>
+              Fuel Capacity:{" "}
+              <span className="font-medium">{formData.bikeSpecs?.fuel}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    )}
 
-                {formData.subGearOption === "Individually" && (
-                  <div className="ml-0 sm:ml-6 mt-4 space-y-3 p-3 border-t border-gray-200">
-                    <h6 className="font-semibold text-sm mb-2">Select Individual Items:</h6>
-                    <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        name="gear.helmet"
-                        checked={formData.gear.helmet}
-                        onChange={handleChange}
-                        className="form-checkbox h-4 w-4 text-yellow-500 rounded"
-                      />
-                      <span className="text-sm">Helmet - $45/day</span>
-                    </label>
-                    <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        name="gear.jacket"
-                        checked={formData.gear.jacket}
-                        onChange={handleChange}
-                        className="form-checkbox h-4 w-4 text-yellow-500 rounded"
-                      />
-                      <span className="text-sm">Jacket - $65/day</span>
-                    </label>
-                    <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        name="gear.gloves"
-                        checked={formData.gear.gloves}
-                        onChange={handleChange}
-                        className="form-checkbox h-4 w-4 text-yellow-500 rounded"
-                      />
-                      <span className="text-sm">Gloves - $25/day</span>
-                    </label>
-                  </div>
-                )}
-              </div>
-            )}
 
-            <h4 className="text-xl font-bold mt-8 text-gray-800">Add-On Options</h4>
-            <div className="space-y-3 p-4 border rounded-lg bg-white shadow-sm">
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="addOns.excessReduction"
-                  checked={formData.addOns.excessReduction}
-                  onChange={handleChange}
-                  className="form-checkbox h-5 w-5 text-blue-500 rounded"
-                />
-                <span className="text-base">Excess Reduction - <span className="font-medium text-blue-600">$32/day</span></span>
-              </label>
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="addOns.tyreProtection"
-                  checked={formData.addOns.tyreProtection}
-                  onChange={handleChange}
-                  className="form-checkbox h-5 w-5 text-blue-500 rounded"
-                />
-                <span className="text-base">Tyre Protection - <span className="font-medium text-blue-600">$23/day</span></span>
-              </label>
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="addOns.windscreen"
-                  checked={formData.addOns.windscreen}
-                  onChange={handleChange}
-                  className="form-checkbox h-5 w-5 text-blue-500 rounded"
-                />
-                <span className="text-base">Touring Windscreen (Tall) - <span className="font-medium text-blue-600">$10/day</span></span>
-              </label>
-            </div>
+    <h4 className="text-xl font-bold mt-8 text-gray-800">Choose to Hire Gear</h4>
+    <div className="space-y-4">
+      <label className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 transition duration-150">
+        <input
+          type="radio"
+          name="gearOption"
+          value="Bike hire only"
+          checked={formData.gearOption === "Bike hire only"}
+          onChange={handleChange}
+          className="form-radio h-5 w-5 text-yellow-500"
+        />
+        <span className="text-base font-medium">Bike hire only</span>
+      </label>
+      <label className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 transition duration-150">
+        <input
+          type="radio"
+          name="gearOption"
+          value="Bike hire + gear"
+          checked={formData.gearOption === "Bike hire + gear"}
+          onChange={handleChange}
+          className="form-radio h-5 w-5 text-yellow-500"
+        />
+        <span className="text-base font-medium">Bike hire + gear</span>
+      </label>
+    </div>
 
-            <div className="flex justify-between mt-8 pt-4 border-t border-gray-200">
-              <button type="button" onClick={handlePrev} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg transition duration-150 shadow-md">
-                Previous
-              </button>
-              <button
-                type="button"
-                disabled={!isStepValid() || loading}
-                onClick={handleNext}
-                className={getButtonClass(isStepValid() && !loading)}
-              >
-                Next
-              </button>
-            </div>
+    {formData.gearOption === "Bike hire + gear" && (
+      <div className="ml-0 sm:ml-6 mt-4 space-y-4 p-4 border rounded-lg bg-yellow-50">
+        <h5 className="font-semibold text-gray-700">Gear Rental Option:</h5>
+        <label className="flex items-center space-x-3">
+          <input
+            type="radio"
+            name="subGearOption"
+            value="Package Option - $100/day"
+            checked={formData.subGearOption === "Package Option - $100/day"}
+            onChange={handleChange}
+            className="form-radio h-4 w-4 text-yellow-500"
+          />
+          <span className="text-sm sm:text-base">
+            Package Option -{" "}
+            <span className="font-semibold text-green-600">$100/day</span>{" "}
+            (Helmet, Jacket, Gloves)
+          </span>
+        </label>
+        <label className="flex items-center space-x-3">
+          <input
+            type="radio"
+            name="subGearOption"
+            value="Individually"
+            checked={formData.subGearOption === "Individually"}
+            onChange={handleChange}
+            className="form-radio h-4 w-4 text-yellow-500"
+          />
+          <span className="text-sm sm:text-base">Individually</span>
+        </label>
+
+        {formData.subGearOption === "Individually" && (
+          <div className="ml-0 sm:ml-6 mt-4 space-y-3 p-3 border-t border-gray-200">
+            <h6 className="font-semibold text-sm mb-2">
+              Select Individual Items:
+            </h6>
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                name="gear.helmet"
+                checked={formData.gear.helmet}
+                onChange={handleChange}
+                className="form-checkbox h-4 w-4 text-yellow-500 rounded"
+              />
+              <span className="text-sm">Helmet - $45/day</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                name="gear.jacket"
+                checked={formData.gear.jacket}
+                onChange={handleChange}
+                className="form-checkbox h-4 w-4 text-yellow-500 rounded"
+              />
+              <span className="text-sm">Jacket - $65/day</span>
+            </label>
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                name="gear.gloves"
+                checked={formData.gear.gloves}
+                onChange={handleChange}
+                className="form-checkbox h-4 w-4 text-yellow-500 rounded"
+              />
+              <span className="text-sm">Gloves - $25/day</span>
+            </label>
           </div>
         )}
+      </div>
+    )}
+
+    {/*  Add-Ons */}
+    <h4 className="text-xl font-bold mt-8 text-gray-800">Add-On Options</h4>
+    <div className="space-y-3 p-4 border rounded-lg bg-white shadow-sm">
+      <label className="flex items-center space-x-3">
+        <input
+          type="checkbox"
+          name="addOns.excessReduction"
+          checked={formData.addOns.excessReduction}
+          onChange={handleChange}
+          className="form-checkbox h-5 w-5 text-blue-500 rounded"
+        />
+        <span className="text-base">
+          Excess Reduction -{" "}
+          <span className="font-medium text-blue-600">$32/day</span>
+        </span>
+      </label>
+      <label className="flex items-center space-x-3">
+        <input
+          type="checkbox"
+          name="addOns.tyreProtection"
+          checked={formData.addOns.tyreProtection}
+          onChange={handleChange}
+          className="form-checkbox h-5 w-5 text-blue-500 rounded"
+        />
+        <span className="text-base">
+          Tyre Protection -{" "}
+          <span className="font-medium text-blue-600">$23/day</span>
+        </span>
+      </label>
+      <label className="flex items-center space-x-3">
+        <input
+          type="checkbox"
+          name="addOns.windscreen"
+          checked={formData.addOns.windscreen}
+          onChange={handleChange}
+          className="form-checkbox h-5 w-5 text-blue-500 rounded"
+        />
+        <span className="text-base">
+          Touring Windscreen (Tall) -{" "}
+          <span className="font-medium text-blue-600">$10/day</span>
+        </span>
+      </label>
+    </div>
+
+    {/*  Navigation Buttons  */}
+    <div className="flex justify-between mt-8 pt-4 border-t border-gray-200">
+      <button
+        type="button"
+        onClick={handlePrev}
+        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg transition duration-150 shadow-md"
+      >
+        Previous
+      </button>
+      <button
+        type="button"
+        disabled={!isStepValid() || loading}
+        onClick={handleNext}
+        className={getButtonClass(isStepValid() && !loading)}
+      >
+        Next
+      </button>
+    </div>
+  </div>
+)}
 
         {/* Step 3: Rider Details */}
         {step === 3 && (

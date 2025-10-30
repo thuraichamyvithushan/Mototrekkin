@@ -1,33 +1,77 @@
-import Bike from '../models/Bike.js';
+import Bike from "../models/Bike.js";
 
-export const getBikes = async (req, res) => {
+// Create a new bike
+export const createBike = async (req, res) => {
   try {
-    console.log('getBikes: Fetching all bikes');
-    const bikes = await Bike.find().sort({ name: 1 });
-    console.log('getBikes: Found', bikes.length, 'bikes');
-    res.status(200).json(bikes);
+    const { name, price, available, remaining, specs } = req.body;
+
+    const newBike = new Bike({
+      name,
+      price,
+      available,
+      remaining,
+      specs: specs ? JSON.parse(specs) : {},
+      image: req.file ? `/uploads/${req.file.filename}` : null,
+    });
+
+    await newBike.save();
+    res.status(201).json({ message: "Bike added successfully", bike: newBike });
   } catch (error) {
-    console.error('getBikes: Error', error.message);
-    res.status(500).json({ message: 'Failed to fetch bikes', error: error.message });
+    res.status(500).json({ message: "Error adding bike", error: error.message });
   }
 };
 
-export const updateBikeRemaining = async (bikeName, decrement = 1) => {
+// Get all bikes
+export const getAllBikes = async (req, res) => {
   try {
-    console.log('updateBikeRemaining: Updating bike', { bikeName, decrement });
-    const bike = await Bike.findOne({ name: bikeName });
-    if (!bike) {
-      throw new Error(`Bike ${bikeName} not found`);
-    }
-    if (bike.remaining < decrement) {
-      throw new Error(`Not enough ${bikeName} bikes remaining`);
-    }
-    bike.remaining -= decrement;
-    await bike.save();
-    console.log('updateBikeRemaining: Updated', { bikeName, remaining: bike.remaining });
-    return bike;
+    const bikes = await Bike.find();
+    res.status(200).json(bikes);
   } catch (error) {
-    console.error('updateBikeRemaining: Error', error.message);
-    throw error;
+    res.status(500).json({ message: "Error fetching bikes", error: error.message });
+  }
+};
+
+// Get single bike
+export const getBikeById = async (req, res) => {
+  try {
+    const bike = await Bike.findById(req.params.id);
+    if (!bike) return res.status(404).json({ message: "Bike not found" });
+    res.status(200).json(bike);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching bike", error: error.message });
+  }
+};
+
+// Update bike
+export const updateBike = async (req, res) => {
+  try {
+    const { name, price, available, remaining, specs } = req.body;
+    const bike = await Bike.findById(req.params.id);
+    if (!bike) return res.status(404).json({ message: "Bike not found" });
+
+    bike.name = name || bike.name;
+    bike.price = price || bike.price;
+    bike.available = available !== undefined ? available : bike.available;
+    bike.remaining = remaining || bike.remaining;
+    bike.specs = specs ? JSON.parse(specs) : bike.specs;
+    if (req.file) bike.image = `/uploads/${req.file.filename}`;
+
+    await bike.save();
+    res.status(200).json({ message: "Bike updated successfully", bike });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating bike", error: error.message });
+  }
+};
+
+// Delete bike
+export const deleteBike = async (req, res) => {
+  try {
+    const bike = await Bike.findById(req.params.id);
+    if (!bike) return res.status(404).json({ message: "Bike not found" });
+
+    await Bike.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Bike deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting bike", error: error.message });
   }
 };

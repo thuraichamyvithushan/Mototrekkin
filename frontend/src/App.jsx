@@ -33,9 +33,10 @@ import NZSIRegistrationFormRefactored from './components/bookingforms/nzsi/NZSIR
 import SuccessPage from './pages/SuccessPage';
 import CancelPage from './pages/CancelPage';
 import ResetPassword from "./pages/ResetPassword";
-// import AddBikeForm from './pages/AddBikeForm';
-// import AvailableBikes from './pages/AvailableBikes';
-
+import AddBikeForm from './pages/AddBikeForm';
+import Bikes from './pages/Bikes';
+import BikeHires from './pages/HireBike';
+import CreateBikeHireForm from './pages/HireBikeAddform'
 
 
 // Child component to use AuthContext
@@ -131,9 +132,10 @@ const AppContent = () => {
         />
 
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        {/* <Route path="/add-bike" element={<AddBikeForm />} /> */}
-        {/* <Route path="/a-bike" element={<AvailableBikes />} /> */}
-        
+        <Route path="/add-bike" element={<AddBikeForm />} />
+        <Route path="/bike" element={<Bikes />} />
+         <Route path="/hire-bike" element={<BikeHires />} />
+        <Route path="add-h"  element={<CreateBikeHireForm/>} />
 
       </Routes>
 

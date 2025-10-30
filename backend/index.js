@@ -9,7 +9,9 @@ import bookingRoutes from "./routes/bookingRoutes.js"; // For service bookings
 import bikeBookingRoutes from "./routes/bikeBookingRoutes.js"; // For bike hire bookings
 import authRoutes from "./routes/authRoutes.js";
 import BikeBooking from "./models/BikeBooking.js"; // Import for webhook
-// import bikeRoutes from "./routes/bikeRoutes.js";
+import bikeRoutes from "./routes/bikeRoutes.js";
+import bikeHireRoutes from "./routes/bikeHireRoutes.js";
+
 
 import nzsiRegistrationRoutes from './routes/nzsiRegistration.js';
 
@@ -66,7 +68,9 @@ app.use("/api/auth", authRoutes);
 app.use('/api/nzsiRegistrations', nzsiRegistrationRoutes);
 app.use('/api/nzsiRegistrations/user/:userId', nzsiRegistrationRoutes);
 
-// app.use("/api/bikes", bikeRoutes);
+app.use("/api/bikes", bikeRoutes);
+app.use("/api/bikehires", bikeHireRoutes);
+
 
 // Stripe webhook
 app.post("/api/webhook", (req, res) => {

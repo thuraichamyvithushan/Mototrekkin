@@ -274,10 +274,10 @@ import axios from '../../../axiosConfig';
 export const fetchMotorcycles = async () => {
   try {
     console.log('fetchMotorcycles: Fetching bikes from API');
-    const response = await axios.get('/api/nzsiRegistrations/bikes');
+    const response = await axios.get('/api/bikes');
     const bikes = response.data.map(bike => ({
       ...bike,
-      image: bike.image ? `${bike.image}` : null,
+      image: bike.image ? `http://localhost:5000${bike.image}` : null,
     }));
     console.log('fetchMotorcycles: Fetched', bikes.length, 'bikes');
     return bikes.filter(bike => bike.available && bike.remaining > 0);

@@ -1842,7 +1842,7 @@ const NZSIRegistrationForm = () => {
                       <div className="mb-3">
                         {bike.image ? (
                           <img
-                            src={bike.image}
+                            src={`http://localhost:5000${bike.image}`}
                             alt={bike.name}
                             className="w-full h-24 sm:h-32 object-cover rounded-md mx-auto"
                             onError={(e) => {

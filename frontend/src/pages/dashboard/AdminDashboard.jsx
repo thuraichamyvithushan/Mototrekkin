@@ -15,10 +15,12 @@ import AdminDashboardDefaultData from "../../components/dashboard/admindashboard
 import AdminUsers from "../../components/dashboard/admindashboard/AdminUsers";
 import AdminOrders from "../../components/dashboard/admindashboard/AdminOrders";
 import AdminProducts from "../../components/dashboard/admindashboard/AdminProducts";
-import AdminEvents from "../../components/dashboard/admindashboard/AdminTrainings";
+// import AdminEvents from "../../components/dashboard/admindashboard/AdminEventBookings";
 import AdminBikeHire from "../../components/dashboard/admindashboard/AdminBikeHire";
 import AdminEventBookings from "../../components/dashboard/admindashboard/AdminEventBookings";
-import AdminTrainings from "../../components/dashboard/admindashboard/AdminTrainings";
+import Bikes from "../Bikes"
+import AddBikeForm from "../AddBikeForm";
+import BikeHires from "../HireBike"
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -30,26 +32,22 @@ const AdminDashboard = () => {
         return <AdminDashboardDefaultData />;
       case "users":
         return <AdminUsers />;
+      case "Bikes":
+        return <Bikes />;
+      case "Bike-Hire":
+        return <BikeHires />;
       case "service bookings":
         return <AdminOrders />;
       case "bike hire":
         return <AdminBikeHire />;
       case "event bookings":
         return <AdminEventBookings />;
-      case "Trainings bookings":
-        return <AdminTrainings />;
       case "products":
         return <AdminProducts />;
-      case "events":
-        return <AdminEvents />;
-      case "logout":
-        return (
-          <div>
-            <h2 className="text-2xl font-bold">Logged Out</h2>
-          </div>
-        );
-      default:
-        return null;
+      // case "events":
+      //   return <AdminEvents />;
+      case "Add New Bike":
+        return <AddBikeForm/>
     }
   };
 
@@ -81,13 +79,14 @@ const AdminDashboard = () => {
             {[
               { name: "dashboard", icon: LayoutDashboard },
               { name: "users", icon: Users },
+              { name: "Bikes", icon: Bike },
+              { name: "Bike-Hire", icon: Bike },
               { name: "service bookings", icon: Wrench },
               { name: "bike hire", icon: Bike },
               { name: "event bookings", icon: Bike },
-              { name: "Trainings bookings", icon: Bike },
               { name: "products", icon: Box },
               { name: "events", icon: Calendar },
-             
+              { name: "Add New Bike", icon: Bike },
             ].map((tab) => (
               <li key={tab.name}>
                 <button
