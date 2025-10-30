@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000", // Proxy will route this to http://localhost:5000
+  baseURL: "https://mototrekkin.vercel.app", 
 });
 
 instance.interceptors.request.use((config) => {

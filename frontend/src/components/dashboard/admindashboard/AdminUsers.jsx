@@ -12,26 +12,15 @@ const AdminUsers = () => {
   const [form, setForm] = useState({ fullName: '', email: '', password: '', role: 'user' }); // ← FIXED
   const [saving, setSaving] = useState(false);
 
-
-  const BASE_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000/api/auth"
-    : "https://mototrekkin.vercel.app/api/auth";
-
-
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = async () => {
     try {
-      // const token = localStorage.getItem('token');
-      // const res = await axios.get('http://localhost:5000/api/auth/users', {
-      //   headers: { Authorization: `Bearer ${token}` },
-
-      
-    const res = await axios.get(`${BASE_URL}/users`, {
-      headers: { Authorization: `Bearer ${token}` },
+      const token = localStorage.getItem('token');
+      const res = await axios.get('/api/auth/users', {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data);
       setLoading(false);
@@ -78,7 +67,7 @@ const AdminUsers = () => {
         });
         setUsers(prev => [res.data.user, ...prev]);
       } else {
-        res = await axios.put(`http://localhost:5000/api/auth/users/${modal.user._id}`, payload, {
+        res = await axios.put(`/api/auth/users/${modal.user._id}`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(prev => prev.map(u => u._id === modal.user._id ? res.data.user : u));
@@ -97,7 +86,7 @@ const AdminUsers = () => {
     if (!window.confirm('Delete this user?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/auth/users/${id}`, {
+      await axios.delete(`/api/auth/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(prev => prev.filter(u => u._id !== id));
