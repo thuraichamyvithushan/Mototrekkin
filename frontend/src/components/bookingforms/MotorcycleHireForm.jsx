@@ -320,7 +320,7 @@ const BikeBookingForm = () => {
       }
 
       console.log("Submitting to:", `${axios.defaults.baseURL}/api/bikeBookings/create`);
-      const bookingResponse = await axios.post("/api/bikeBookings/create", formDataToSend, {
+      const bookingResponse = await axios.post("https://mototrekkin.vercel.app/api/bikeBookings/create", formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       const { bookingId, emailStatus, paymentSessionId } = bookingResponse.data;

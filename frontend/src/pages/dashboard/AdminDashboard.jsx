@@ -87,7 +87,7 @@ const AdminDashboard = () => {
               { name: "Trainings bookings", icon: Bike },
               { name: "products", icon: Box },
               { name: "events", icon: Calendar },
-              { name: "logout", icon: LogOut },
+             
             ].map((tab) => (
               <li key={tab.name}>
                 <button
