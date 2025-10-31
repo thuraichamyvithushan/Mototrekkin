@@ -21,6 +21,7 @@ import AdminEventBookings from "../../components/dashboard/admindashboard/AdminE
 import Bikes from "../Bikes"
 import AddBikeForm from "../AddBikeForm";
 import BikeHires from "../HireBike"
+import Phase3Bikes from "../Phase3Bike";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -34,6 +35,8 @@ const AdminDashboard = () => {
         return <AdminUsers />;
       case "Bikes":
         return <Bikes />;
+      case "Phase3Bikes":
+        return <Phase3Bikes />;
       case "Bike-Hire":
         return <BikeHires />;
       case "service bookings":
@@ -79,8 +82,9 @@ const AdminDashboard = () => {
             {[
               { name: "dashboard", icon: LayoutDashboard },
               { name: "users", icon: Users },
-              { name: "Bikes", icon: Bike },
-              { name: "Bike-Hire", icon: Bike },
+              { name: "NzBikes", icon: Bike },
+              { name: "Phase3Bikes", icon: Bike },
+              { name: "BikeHire", icon: Bike },
               { name: "service bookings", icon: Wrench },
               { name: "bike hire", icon: Bike },
               { name: "event bookings", icon: Bike },

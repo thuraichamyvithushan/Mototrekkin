@@ -37,7 +37,8 @@ import AddBikeForm from './pages/AddBikeForm';
 import Bikes from './pages/Bikes';
 import BikeHires from './pages/HireBike';
 import CreateBikeHireForm from './pages/HireBikeAddform'
-
+import Phase3Bikes from './pages/Phase3Bike';
+import CreatePhase3Form from './pages/Phase3BikeForm';
 
 // Child component to use AuthContext
 const AppContent = () => {
@@ -113,6 +114,13 @@ const AppContent = () => {
           path="/registration-mdp-phase-3"
           element={<MDPPhase3RegistrationPage />}
         />
+
+       {/* <Route
+          path="/registration-mdp-phase-3"
+          element={<ProtectedRoute element={<MDPPhase2Registration />}requiredRole="user" />}
+        /> */}
+
+
         <Route
           path="/userdashboard"
           element={<ProtectedRoute element={<UserDashboard />} requiredRole="user" />}
@@ -134,8 +142,10 @@ const AppContent = () => {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/add-bike" element={<AddBikeForm />} />
         <Route path="/bike" element={<Bikes />} />
-         <Route path="/hire-bike" element={<BikeHires />} />
+        <Route path="/hire-bike" element={<BikeHires />} />
         <Route path="add-h"  element={<CreateBikeHireForm/>} />
+        <Route path="Phase3-bikes"  element={<Phase3Bikes/>} />
+        <Route path="Phase3-bikeAdd"  element={<CreatePhase3Form/>} />
 
       </Routes>
 

@@ -421,7 +421,7 @@ const [error, setError] = useState("");
  useEffect(() => {
        const fetchBikes = async () => {
           try {
-            const res = await axios.get("http://localhost:5000/api/bikehires");
+            const res = await axios.get("http://localhost:5000/api/bikehires  ");
                setBikes(res.data);
            } catch (err) {
                setError("Failed to load bikes");
