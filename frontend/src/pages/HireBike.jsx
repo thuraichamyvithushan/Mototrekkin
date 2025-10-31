@@ -132,23 +132,30 @@ const BikeHires = () => {
 
   if (loading)
     return <p className="text-center mt-20 text-gray-400">Loading bike hires...</p>;
-  if (!bikeHires.length)
-    return <p className="text-center mt-20 text-red-500">No bike hires found.</p>;
 
   return (
     <div className="bg-gray-900 p-6 sm:p-8 font-sans">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
         <h2 className="text-3xl text-white font-bold mb-4 sm:mb-0">
-          All Bike Hires
+          All Bikes
         </h2>
         <button
           onClick={() => setCreateMode(true)}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded"
         >
-          + Add New Bike Hire
+          + Add New Bike
         </button>
       </div>
 
+      {/* No bike hires message */}
+      {bikeHires.length === 0 && (
+        <p className="text-center mt-10 text-red-500">
+          No bikes found. Please add a bike.
+        </p>
+      )}
+
+      {/* Bike cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {bikeHires.map((bike) => (
           <div
@@ -180,7 +187,7 @@ const BikeHires = () => {
         ))}
       </div>
 
-      {/* Create Bike Hire Modal */}
+      {/* Create Modal */}
       {createMode && (
         <div
           className="fixed inset-0 bg-black bg-opacity-70 flex justify-start items-start z-50 p-4 sm:p-6"
@@ -278,7 +285,7 @@ const BikeHires = () => {
         </div>
       )}
 
-      {/* Update / View bike hire Modal */}
+      {/* View / Edit Modal */}
       {selectedBikeHire && (
         <div
           className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4 sm:p-6"
@@ -293,10 +300,10 @@ const BikeHires = () => {
           >
             {!editMode ? (
               <>
+                {/* Bike details */}
                 <h2 className="text-2xl font-bold text-white mb-4 text-center">
                   {selectedBikeHire.name}
                 </h2>
-
                 {selectedBikeHire.image ? (
                   <img
                     src={`http://localhost:5000${selectedBikeHire.image}`}
@@ -308,7 +315,6 @@ const BikeHires = () => {
                     No Image
                   </div>
                 )}
-
                 <p className="text-yellow-400 mb-2">
                   Price: {selectedBikeHire.price} $
                 </p>
@@ -318,14 +324,12 @@ const BikeHires = () => {
                 <p className="text-gray-300 mb-2 text-sm sm:text-base">
                   Added on: {new Date(selectedBikeHire.createdAt).toLocaleDateString()}
                 </p>
-
                 <h3 className="text-white font-semibold mt-3 mb-1">Specifications:</h3>
                 <ul className="text-gray-300 text-sm sm:text-base mb-4 space-y-1">
                   <li><b>Engine Type:</b> {selectedBikeHire.engineType}</li>
                   <li><b>Fuel Capacity:</b> {selectedBikeHire.fuelCapacity}</li>
                   <li><b>Weight:</b> {selectedBikeHire.weight}</li>
                 </ul>
-
                 <div className="flex flex-col sm:flex-row justify-between gap-2 mt-4">
                   <button
                     onClick={handleEditClick}
@@ -348,6 +352,7 @@ const BikeHires = () => {
                 </div>
               </>
             ) : (
+              // Edit form
               <form
                 onSubmit={handleEditSubmit}
                 className="space-y-3 overflow-auto max-h-[80vh] p-2"
@@ -355,7 +360,6 @@ const BikeHires = () => {
                 <h2 className="text-2xl font-bold text-white mb-2 text-center">
                   Edit {selectedBikeHire.name}
                 </h2>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <input
                     type="text"
@@ -394,7 +398,6 @@ const BikeHires = () => {
                     <label>Available</label>
                   </div>
                 </div>
-
                 <h3 className="text-white font-semibold mt-2 mb-1">Specifications:</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                   <input
@@ -428,7 +431,6 @@ const BikeHires = () => {
                     className="w-full text-white"
                   />
                 </div>
-
                 <div className="flex flex-col sm:flex-row justify-between gap-2 mt-4">
                   <button
                     type="submit"

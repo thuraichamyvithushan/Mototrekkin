@@ -7,7 +7,7 @@ const Bikes = () => {
   const [loading, setLoading] = useState(true);
   const [selectedBike, setSelectedBike] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [editData, setEditData] = useState({});
+  const [editData, setEditData] = useState({ specs: {} });
 
   const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ const Bikes = () => {
 
   const handleEditChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name in editData.specs) {
+    if (editData.specs && name in editData.specs) {
       setEditData({
         ...editData,
         specs: { ...editData.specs, [name]: value },
@@ -70,15 +70,11 @@ const Bikes = () => {
         ...editData,
         specs: JSON.stringify(editData.specs),
       };
-
       const res = await axios.put(
         `http://localhost:5000/api/bikes/${selectedBike._id}`,
         payload
       );
-
-      setBikes(
-        bikes.map((b) => (b._id === selectedBike._id ? res.data.bike : b))
-      );
+      setBikes(bikes.map((b) => (b._id === selectedBike._id ? res.data.bike : b)));
       setSelectedBike(res.data.bike);
       setEditMode(false);
     } catch (err) {
@@ -88,17 +84,12 @@ const Bikes = () => {
 
   if (loading)
     return <p className="text-center mt-20 text-gray-400">Loading bikes...</p>;
-  if (!bikes.length)
-    return (
-      <p className="text-center mt-20 text-red-500">No bikes found.</p>
-    );
 
   return (
-    <div className="bg-gray-900  p-6 sm:p-8 font-sans">
+    <div className="bg-gray-900 p-6 sm:p-8 font-sans">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <h2 className="text-3xl text-white font-bold mb-4 sm:mb-0">
-          All Bikes
-        </h2>
+        <h2 className="text-3xl text-white font-bold mb-4 sm:mb-0">All Bikes</h2>
         <button
           onClick={() => navigate("/add-bike")}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded"
@@ -107,6 +98,14 @@ const Bikes = () => {
         </button>
       </div>
 
+      {/* No bikes message */}
+      {bikes.length === 0 && (
+        <p className="text-center mt-10 text-red-500">
+          No bikes found. Please add a bike.
+        </p>
+      )}
+
+      {/* Bike cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {bikes.map((bike) => (
           <div
@@ -127,7 +126,6 @@ const Bikes = () => {
             <h3 className="text-white font-semibold text-center">{bike.name}</h3>
             <p className="text-yellow-400 text-center">{bike.price} $/Day</p>
             <p className="text-green-400 text-center">Remaining: {bike.remaining}</p>
-
             <button
               onClick={() => setSelectedBike(bike)}
               className="mt-2 px-3 py-1 rounded bg-red-600 hover:bg-red-500 text-white font-semibold w-full"
@@ -138,7 +136,7 @@ const Bikes = () => {
         ))}
       </div>
 
-{/* update bike */}
+      {/* Update bike modal */}
       {selectedBike && (
         <div
           className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4 sm:p-6"
@@ -169,15 +167,10 @@ const Bikes = () => {
                   </div>
                 )}
 
-                <p className="text-yellow-400 mb-2">
-                  Price: {selectedBike.price} $
-                </p>
-                <p className="text-green-400 mb-2">
-                  Remaining: {selectedBike.remaining}
-                </p>
+                <p className="text-yellow-400 mb-2">Price: {selectedBike.price} $</p>
+                <p className="text-green-400 mb-2">Remaining: {selectedBike.remaining}</p>
                 <p className="text-gray-300 mb-2 text-sm sm:text-base">
-                  Added on:{" "}
-                  {new Date(selectedBike.createdAt).toLocaleDateString()}
+                  Added on: {new Date(selectedBike.createdAt).toLocaleDateString()}
                 </p>
 
                 <h3 className="text-white font-semibold mt-3 mb-1">Specifications:</h3>
@@ -262,9 +255,7 @@ const Bikes = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                   {Object.entries(editData.specs).map(([key, value]) => (
                     <div key={key} className="flex flex-col">
-                      <label className="text-gray-300 text-sm mb-1 capitalize">
-                        {key.replace(/([A-Z])/g, " $1")}
-                      </label>
+                      <label className="text-gray-300 text-sm mb-1 capitalize">{key}</label>
                       <input
                         type="text"
                         name={key}

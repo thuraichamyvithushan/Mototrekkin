@@ -18,8 +18,7 @@ import AdminProducts from "../../components/dashboard/admindashboard/AdminProduc
 // import AdminEvents from "../../components/dashboard/admindashboard/AdminEventBookings";
 import AdminBikeHire from "../../components/dashboard/admindashboard/AdminBikeHire";
 import AdminEventBookings from "../../components/dashboard/admindashboard/AdminEventBookings";
-import Bikes from "../Bikes"
-import AddBikeForm from "../AddBikeForm";
+import Bikes from "../NzBikes"
 import BikeHires from "../HireBike"
 import Phase3Bikes from "../Phase3Bike";
 
@@ -33,11 +32,11 @@ const AdminDashboard = () => {
         return <AdminDashboardDefaultData />;
       case "users":
         return <AdminUsers />;
-      case "Bikes":
+      case "NzBikes":
         return <Bikes />;
       case "Phase3Bikes":
         return <Phase3Bikes />;
-      case "Bike-Hire":
+      case "HireBikes":
         return <BikeHires />;
       case "service bookings":
         return <AdminOrders />;
@@ -49,8 +48,7 @@ const AdminDashboard = () => {
         return <AdminProducts />;
       // case "events":
       //   return <AdminEvents />;
-      case "Add New Bike":
-        return <AddBikeForm/>
+   
     }
   };
 
@@ -84,13 +82,13 @@ const AdminDashboard = () => {
               { name: "users", icon: Users },
               { name: "NzBikes", icon: Bike },
               { name: "Phase3Bikes", icon: Bike },
-              { name: "BikeHire", icon: Bike },
+              { name: "HireBikes", icon: Bike },
               { name: "service bookings", icon: Wrench },
               { name: "bike hire", icon: Bike },
               { name: "event bookings", icon: Bike },
               { name: "products", icon: Box },
               { name: "events", icon: Calendar },
-              { name: "Add New Bike", icon: Bike },
+              
             ].map((tab) => (
               <li key={tab.name}>
                 <button

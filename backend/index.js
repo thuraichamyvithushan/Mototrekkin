@@ -72,7 +72,7 @@ app.use('/api/nzsiRegistrations/user/:userId', nzsiRegistrationRoutes);
 
 app.use("/api/bikes", bikeRoutes);
 app.use("/api/bikehires", bikeHireRoutes);
-app.use("/api/phase3", phase3Routes);
+app.use("/api/phase3", phase3Routes);  
 
 
 

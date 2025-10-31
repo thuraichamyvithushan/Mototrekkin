@@ -34,7 +34,7 @@ import SuccessPage from './pages/SuccessPage';
 import CancelPage from './pages/CancelPage';
 import ResetPassword from "./pages/ResetPassword";
 import AddBikeForm from './pages/AddBikeForm';
-import Bikes from './pages/Bikes';
+import Bikes from './pages/NzBikes';
 import BikeHires from './pages/HireBike';
 import CreateBikeHireForm from './pages/HireBikeAddform'
 import Phase3Bikes from './pages/Phase3Bike';

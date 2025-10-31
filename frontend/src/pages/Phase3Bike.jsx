@@ -130,9 +130,6 @@ const Phase3Bikes = () => {
   if (loading)
     return <p className="text-center mt-20 text-gray-400">Loading bikes...</p>;
 
-  if (!bikes.length)
-    return <p className="text-center mt-20 text-red-500">No bikes found.</p>;
-
   return (
     <div className="bg-gray-900 p-6 sm:p-8 font-sans">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
@@ -144,6 +141,13 @@ const Phase3Bikes = () => {
           + Add New Bike
         </button>
       </div>
+
+      {/* Show message when no bikes */}
+      {bikes.length === 0 && (
+        <p className="text-center mt-10 text-red-500">
+          No bikes found. Please add a bike.
+        </p>
+      )}
 
       {/* Bike Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
